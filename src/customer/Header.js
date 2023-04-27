@@ -13,8 +13,10 @@ function Header({searchFood}){
     return (
         <Nav className="navbar navbar-expand-sm text-white">
             <div className="container-fluid ">
-                <Link to="/" className="nav-link" style={{marginRight : "20px"}}>Home</Link>
-               
+                <Link to="/" className="nav-link">Home</Link>
+                <Link to="/menu" className="nav-link">Menu</Link>
+                <Link to="/recipes" className="nav-link">Recipes</Link>
+                
                 <div className="collapse navbar-collapse justify-content-end">
                     <Form className="navbar-form navbar-right" id="search-form" onSubmit={handleSubmit}>
                         <InputGroup>
