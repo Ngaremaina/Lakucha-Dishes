@@ -1,33 +1,46 @@
-import React from "react";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-
-const Signup = () => {
+import React, { useState } from "react";
+const Signup = ({signUpUser}) => {
+    const [user, setUser] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: ""
+    })
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        signUpUser(user)
+        
+    }
+    const handleChange = (event) =>{
+        const value = event.target.value
+        const id = event.target.id
+        setUser(prev => {return {...prev, [id]:value}})
+    }
+   
     return(
-        <Form className = "">
-            <h3 className="d-flex justify-content-center mb-3 mt-3">Sign Up Form</h3>
-            <Form.Group controlId = "formBasicFirstName" className="p-2 mb-2">
-                <Form.Label>First Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter first name" />
-                <Form.Text className="text-muted">Please Enter your First Name</Form.Text>
-            </Form.Group>
-            <Form.Group controlId = "formBasicLastName" className="p-2 mb-2">
-                <Form.Label>Last Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter last name" />
-                <Form.Text className="text-muted">Please Enter your Last Name</Form.Text>
-            </Form.Group>
-            <Form.Group controlId="formBasicEmail" className="p-2 mb-2">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
-                <Form.Text className="text-muted">Please Enter your Email Address</Form.Text>
-            </Form.Group>
-            <Form.Group controlId = "formBasicPassword" className="p-2 mb-2">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="enter password"/>
-                <Form.Text className="text-muted">Enter your password</Form.Text>
-            </Form.Group>
-            <Button variant="primary" type="submit" className="mb-2">Submit</Button>
-        </Form>
+        <form onSubmit={handleSubmit}>
+            <h3 className="mb-3 d-flex justify-content-center">Signup</h3>
+            <div className="mb-3">
+                <label className="form-label">First Name</label>
+                <input type="text" className="form-control" id="firstName" value={user.firstName} aria-describedby="nameHelp" onChange={handleChange}/>
+                
+            </div>
+            <div className="mb-3">
+                <label className="form-label">Last Name</label>
+                <input type="text" className="form-control" id="lastName" aria-describedby="emailHelp" onChange={handleChange}/>
+                
+            </div>
+            <div className="mb-3">
+                <label  className="form-label">Email Address</label>
+                <input type="email" className="form-control" id="email" aria-describedby="emailHelp" onChange={handleChange}/>
+             
+            </div>
+            <div className="mb-3">
+                <label  className="form-label">Password</label>
+                <input type="password" className="form-control" id="password" onChange={handleChange}/>
+            </div>
+            <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
     )
 
 }

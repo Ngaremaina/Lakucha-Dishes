@@ -1,23 +1,36 @@
-import React from "react";
-import Form  from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-const Login = () => {
+import React, { useState } from "react";
+
+const Login = ({loginUser}) => {
+    const [user, setUser] = useState({
+        email:"",
+        password:""
+    })
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        loginUser(user)
+    }
+    
+    const handleChange = (event) => {
+        const value = event.target.value
+        const id = event.target.id
+        setUser(prev => {return {...prev, [id]:value}})
+    }
+
     return(
-        <Form>
-            <h3>Sign Up</h3>
-            <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
-                <Form.Text className="text-muted">Please Enter your Email Address</Form.Text>
-                
-            </Form.Group>
-            <Form.Group>
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
-                <Form.Text className="text-muted">Please Enter your Password</Form.Text>
-            </Form.Group>
-            <Button variant="primary">Submit</Button>
-        </Form>
+        <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+                <label className="form-label">Email Address</label>
+                <input type="email" className="form-control" id="email" value={user.email} aria-describedby="emailHelp" onChange={handleChange}/>
+
+                <label className="form-label">Password</label>
+                <input type="password" className="form-control" id="password" value={user.password} onChange={handleChange}/>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+
+            </div>
+            
+        </form>
     )
 
 }
