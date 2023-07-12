@@ -26,7 +26,7 @@ const Login = ({loginUser}) => {
                 <label className="form-label">Password</label>
                 <input type="password" className="form-control" id="password" value={user.password} onChange={handleChange}/>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">Submit</button>
 
             </div>
             
