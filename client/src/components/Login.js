@@ -20,6 +20,7 @@ const Login = ({loginUser}) => {
     return(
         <form onSubmit={handleSubmit}>
             <div className="mb-3">
+                <h3 className="d-flex justify-content-center">Login</h3>
                 <label className="form-label">Email Address</label>
                 <input type="email" className="form-control" id="email" value={user.email} aria-describedby="emailHelp" onChange={handleChange}/>
 

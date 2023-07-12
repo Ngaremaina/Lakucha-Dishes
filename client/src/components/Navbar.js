@@ -1,16 +1,27 @@
-import React from "react";
-import { Nav } from "react-bootstrap";
+import React, { useState } from "react";
+import {Link} from "react-router-dom"
 
-const NavHeader = () => {
+const NavHeader = ({getSearch}) => {
+    const [search, setSearch] = useState("")
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        getSearch(search)
+        
+    }
+    const handleChange = (event) => {
+        return setSearch(event.target.value)
+    }
 
     return(
-        <Nav>
-            <Nav.Link href = "/">Home</Nav.Link>
-            <Nav.Link href = "/menu">Menu</Nav.Link>  
-            <Nav.Link href = "/recipes">Recipes</Nav.Link>
-            {/* <Nav.Link href = "/about">About</Nav.Link> */}
-            <Nav.Link href = "/contact">Contact</Nav.Link>          
-        </Nav>
+        <nav className="nav bg-dark">
+            <Link className = "nav-link" to="/">Home</Link>
+            <Link className = "nav-link" to ="/menu">Menu</Link>
+            <form onSubmit={handleSubmit}>
+                <input type="text" className="" value={search} id = "search" onChange={handleChange}/>
+                <button className="btn-primary">Submit</button>
+            </form>
+        </nav>
     )
 
 }

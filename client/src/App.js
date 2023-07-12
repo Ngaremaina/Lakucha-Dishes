@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Main from './components/Main';
 import {useNavigate} from "react-router-dom"
 
+
 function App() {
   const navigate = useNavigate()
 
@@ -35,9 +36,13 @@ function App() {
         <Route path = "/login" element = {<Login loginUser={loginUser}/>}></Route>
         <Route path = "/" element = {<Main />}></Route>
       </Routes>
+      {/* <Main /> */}
     </div>
   
   );
 }
+
+
+
 
 export default App;

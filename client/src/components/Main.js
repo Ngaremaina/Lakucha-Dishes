@@ -20,21 +20,20 @@ const Main = () => {
 
     useEffect(() => {
         fetchData(searchterm)
-        .then(res => res.json())
         .then(data => setRecipes(data.hits))
     }, [searchterm])
 
     const getSearch = (search) =>{
         return setSearchTerm(search)
     }
-    
+
     return(
         <div>
-            <NavHeader />
+            <NavHeader getSearch = {getSearch}/>
             <Routes>
                 <Route path = "/" element = {<Home foods = {foods}/>}></Route>
                 <Route path = "/menu" element = {<Menu />}></Route>
-                <Route path = "/recipes" element = {<Recipes getSearch = {getSearch} recipes = {recipes}/>}></Route>
+                <Route path = "/recipes" element = {<Recipes recipes = {recipes}/>}></Route>
                 <Route path = "/contact" element = {<Contact />}></Route>
             </Routes>
         </div>
