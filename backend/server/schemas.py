@@ -16,7 +16,7 @@ class AdminSchema(Schema):
     firstname = fields.String()
     lastname = fields.String()
     phone = fields.Integer()
-    
+
 class AuthSchema(Schema):
     id = fields.Integer()
     username = fields.String()
@@ -26,3 +26,17 @@ class AuthSchema(Schema):
     client = fields.Nested(ClientSchema, many=True)
     admin = fields.Nested(AdminSchema, many=True)
 
+
+class CategorySchema(Schema):
+    id = fields.Integer()
+    product_id = fields.Integer()
+    name = fields.String()
+
+class ProductSchema(Schema):
+    id = fields.Integer()
+    name = fields.String()
+    price = fields.Integer()
+    image = fields.String()
+    quantity = fields.String()
+
+    category = fields.Nested(CategorySchema, many=True)

@@ -3,7 +3,7 @@ import FoodItem from "./FoodItem";
 
 const Home = ({food}) => {
     const displayFood = food.map(dish => {
-        return <FoodItem key = {dish.id} />
+        return <FoodItem key = {dish.id} name = {dish.name} description = {dish.description}/>
 
     })
     return(

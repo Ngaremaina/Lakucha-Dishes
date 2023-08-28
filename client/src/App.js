@@ -5,6 +5,8 @@ import Home from './components/Home';
 import Profile from './components/Profile';
 import Signup from './components/Signup';
 import Login from './components/Login';
+import DetailsPage from './components/DetailsPage';
+import NavBar from './components/NavBar';
 
 function App() {
   const [food, setFood] = useState([])
@@ -17,13 +19,21 @@ function App() {
     // fetching()
 
   },[])
+
+  const getProduct = (name) => {
+    fetch(`/products/${name}`)
+    .then(res => res.json())
+    .then(data => setFood(data))
+  }
   return (
     <div>
+      <NavBar />
       <Routes>
         <Route path='/' element = {<Home food = {food}/>}></Route>
         <Route path='/profile' element = {<Profile />}></Route>
         <Route path='/register' element = {<Signup />}></Route>
         <Route path='/login' element = {<Login />}></Route>
+        <Route path = '/:name' element = {<DetailsPage getProduct={getProduct}/>}></Route>
       </Routes>
     </div>
     
