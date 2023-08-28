@@ -1,5 +1,9 @@
-from server import route
-from server import app
+from server import app, route
+from werkzeug.serving import run_simple
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    run_simple(
+        hostname='localhost',
+        port=5555,
+        application=app
+    )
