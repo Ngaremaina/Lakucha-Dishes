@@ -1,5 +1,8 @@
 from server import app, render_template
-import server.routes.user
+from server.routes.user import users
+
+app.register_blueprint(users)
+
 
 @app.route("/", methods= ["GET"])
 def display():
