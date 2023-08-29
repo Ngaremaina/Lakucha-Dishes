@@ -6,7 +6,10 @@ const RecipeDetails = ({getSearch, recipes}) => {
     const { label } = useParams()
     getSearch(label)
     const displayRecipes = recipes?.map(data => {    
-        return <DetailsItem key ={data.recipe.calories}calories = {data.recipe.calories} image = {data.recipe.image} label = {data.recipe.label} source = {data.recipe.source} dishType={data.recipe.dishType} mealType = {data.recipe.mealType} ingredientLines={data.recipe.ingredientLines}/>
+        if (data.recipe.label === label){
+            return <DetailsItem key ={data.recipe.calories}calories = {data.recipe.calories} image = {data.recipe.image} label = {data.recipe.label} source = {data.recipe.source} dishType={data.recipe.dishType} mealType = {data.recipe.mealType} ingredientLines={data.recipe.ingredientLines}/>
+        }
+        
     })
     return(
         <div>
