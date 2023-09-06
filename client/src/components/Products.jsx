@@ -100,16 +100,17 @@ const Products = () => {
                     {product.description.substring(0, 90)}...
                   </p>
                 </div>
-                <ul className="list-group list-group-flush">
+                <p className="text-danger fs-3">$ {product.price}</p>
+                {/* <ul className="list-group list-group-flush">
                   <li className="list-group-item lead">$ {product.price}</li>
                   {/* <li className="list-group-item">Dapibus ac facilisis in</li>
-                    <li className="list-group-item">Vestibulum at eros</li> */}
-                </ul>
+                    <li className="list-group-item">Vestibulum at eros</li> 
+                </ul> */}
                 <div className="card-body">
-                  <Link to={"/product/" + product.id} className="btn btn-dark m-1">
+                  <Link to={"/product/" + product.id} className="btn btn-dark m-1 px-2">
                     Buy Now
                   </Link>
-                  <button className="btn btn-dark m-1" onClick={() => addProduct(product)}>
+                  <button className="btn btn-dark m-1 px-2" onClick={() => addProduct(product)}>
                     Add to Cart
                   </button>
                 </div>
