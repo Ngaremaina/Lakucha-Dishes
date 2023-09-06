@@ -21,7 +21,7 @@ class Client(db.Model):
     image = db.Column(db.String(255))
 
     auth = db.relationship("Auth", backref = "client")
-    # orders = db.relationship("Orders", backref = "client")
+    
 class Admin(db.Model):
     __tablename__ = "admin"
     id = db.Column(db.Integer, primary_key = True)
@@ -40,8 +40,10 @@ class Product(db.Model):
     price = db.Column(db.Integer)
     image = db.Column(db.String(255))
     quantity = db.Column(db.Integer)
+    description = db.Column(db.String(255))
 
     category = db.relationship("Category", backref = "product")
+    rating = db.relationship("Rating", backref = "product")
 
 class Category(db.Model):
     __tablename__ = "category"
@@ -49,9 +51,9 @@ class Category(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
     name = db.Column(db.String(255))
 
-# class Orders(db.Model):
-#     __tablename__ = "orders"
+class Rating(db.Model):
+    __tablename__ = "rating"
 
-#     id = db.Column(db.Integer, primary_key = True)
-#     client_id = db.Column(db.ForeignKey("client.id"))
-#     shipping_date = db.Column(db.Date)
+    id = db.Column(db.Integer, primary_key = True)
+    product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
+    rate = db.Column(db.Integer)

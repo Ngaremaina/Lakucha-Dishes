@@ -32,11 +32,18 @@ class CategorySchema(Schema):
     product_id = fields.Integer()
     name = fields.String()
 
+class RatingSchema(Schema):
+    id = fields.Integer()
+    product_id = fields.Integer()
+    rate = fields.Integer()
+
 class ProductSchema(Schema):
     id = fields.Integer()
     name = fields.String()
     price = fields.Integer()
     image = fields.String()
-    quantity = fields.String()
+    quantity = fields.Integer()
+    description = fields.String()
 
     category = fields.Nested(CategorySchema, many=True)
+    rating = fields.Nested(RatingSchema, many=True)
