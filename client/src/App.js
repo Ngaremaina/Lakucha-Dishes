@@ -24,9 +24,6 @@ function App() {
     fetchingProducts()
   },[])
 
-  console.log(products)
-  
-
   return (
     <div className="App">
       <NavBar />
