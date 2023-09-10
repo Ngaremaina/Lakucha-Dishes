@@ -6,7 +6,7 @@ const DetailsItem = ({image, category, name, price, description, rate}) => {
         <div className="container my-5 py-2">
         <div className="row">
           <div className="col-md-6 col-sm-12 py-3">
-            <img className="img-fluid" src={image} alt={name} width="400px" height="400px" />
+            <img className="img-fluid" src={image} alt={name} width="500px" height="500px" />
           </div>
           <div className="col-md-6 col-md-6 py-5">
             <h4 className="text-uppercase text-muted">{category}</h4>
@@ -18,9 +18,7 @@ const DetailsItem = ({image, category, name, price, description, rate}) => {
            
             <p className="lead">{description}</p>
             {/* <button className="btn btn-outline-dark" onClick={() => addProduct(product)}>Add to Cart</button> */}
-            <Link to="/cart" className="btn btn-dark mx-3">
-              Go to Cart
-            </Link>
+            <Link to="/cart" className="btn btn-primary mx-3">Go to Cart</Link>
           </div>
         </div>
       </div>
