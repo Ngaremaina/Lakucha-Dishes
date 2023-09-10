@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const NavBar = () => {
     return(
-        <nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <nav className="navbar navbar-expand-lg navbar-light bg-dark sticky-top">
         <div className="d-flex container-fluid">
 
             <NavLink className="navbar-brand" to="/">Lakucha Dishes</NavLink>

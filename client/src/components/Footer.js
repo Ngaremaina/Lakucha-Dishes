@@ -1,10 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
       <div className="container-fluid my-3">
         {/* Footer */}
-        <footer className="text-center text-lg-start text-white" style={{backgroundColor: '#45526e'}}>
+        <footer className="text-center text-lg-start text-white bg-dark">
           {/* Grid container */}
           <div className="container p-4 pb-0">
             {/* Section: Links */}
@@ -26,16 +27,16 @@ const Footer = () => {
                 <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
                   <h6 className="text-uppercase mb-4 font-weight-bold">Menu</h6>
                   <p>
-                    <a className="text-white">Breakfast</a>
+                    <Link className="text-white">Breakfast</Link>
                   </p>
                   <p>
-                    <a className="text-white">Lunch</a>
+                    <Link className="text-white">Lunch</Link>
                   </p>
                   <p>
-                    <a className="text-white">Dinner</a>
+                    <Link className="text-white">Dinner</Link>
                   </p>
                   <p>
-                    <a className="text-white">Beverages</a>
+                    <Link className="text-white">Beverages</Link>
                   </p>
                 </div>
                 {/* Grid column */}
@@ -46,16 +47,16 @@ const Footer = () => {
                     Useful links
                   </h6>
                   <p>
-                    <a className="text-white">Home</a>
+                    <Link className="text-white">Home</Link>
                   </p>
                   <p>
-                    <a className="text-white">Menu</a>
+                    <Link className="text-white">Menu</Link>
                   </p>
                   <p>
-                    <a className="text-white">Login</a>
+                    <Link className="text-white">Login</Link>
                   </p>
                   <p>
-                    <a className="text-white">Signup</a>
+                    <Link className="text-white">Signup</Link>
                   </p>
                 </div>
                 {/* Grid column */}
@@ -82,7 +83,7 @@ const Footer = () => {
                   {/* Copyright */}
                   <div className="p-3">
                     © 2023 Copyright:
-                    <a className="text-white" href="https://mdbootstrap.com/"> Lakucha Dishes</a>
+                    <Link className="text-white" href="https://mdbootstrap.com/"> Lakucha Dishes</Link>
                   </div>
                   {/* Copyright */}
                 </div>
@@ -90,13 +91,13 @@ const Footer = () => {
                 {/* Grid column */}
                 <div className="col-md-5 col-lg-4 ml-lg-0 text-center text-md-end">
                   {/* Facebook */}
-                  <a className="btn btn-outline-light btn-floating m-1" role="button"><i className="fab fa-facebook-f" /></a>
+                  <Link className="btn btn-outline-light btn-floating m-1" role="button"><i className="fab fa-facebook-f" /></Link>
                   {/* Twitter */}
-                  <a className="btn btn-outline-light btn-floating m-1" role="button"><i className="fab fa-twitter" /></a>
+                  <Link className="btn btn-outline-light btn-floating m-1" role="button"><i className="fab fa-twitter" /></Link>
                   {/* Google */}
-                  <a className="btn btn-outline-light btn-floating m-1" role="button"><i className="fab fa-google" /></a>
+                  <Link className="btn btn-outline-light btn-floating m-1" role="button"><i className="fab fa-google" /></Link>
                   {/* Instagram */}
-                  <a className="btn btn-outline-light btn-floating m-1" role="button"><i className="fab fa-instagram" /></a>
+                  <Link className="btn btn-outline-light btn-floating m-1" role="button"><i className="fab fa-instagram" /></Link>
                 </div>
                 {/* Grid column */}
               </div>

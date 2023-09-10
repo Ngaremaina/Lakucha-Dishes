@@ -12,8 +12,8 @@ const FoodItem = ({image, name, price, rate, description}) => {
                 <p className="card-text">Kshs. {price}</p>
                 <i className="fa-solid fa-star">{rate}</i>
                 <div className="mt-2 gap-3">
-                <Link className="btn btn-primary mx-3" to={`/${name}`}>Buy Now</Link>
-                <Link className="btn btn-primary">Add to Cart</Link>
+                    <Link className="btn btn-primary mx-3" to={`/${name}`}>Buy Now</Link>
+                    <Link className="btn btn-primary">Add to Cart</Link>
                 </div>
                 
             </div>
