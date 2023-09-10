@@ -11,9 +11,9 @@ def get_products():
     profile_data = ProductSchema(many = True).dump(product_list)  
     return make_response(jsonify(profile_data), 200)
 
-@products.route("/products/<int:id>", methods = ["GET"])
-def get_product(id):
-    product = Product.query.filter_by(id = id).first()
+@products.route("/products/<string:name>", methods = ["GET"])
+def get_product(name):
+    product = Product.query.filter_by(name = name).first()
     product_data = ProductSchema().dump(product)
     return make_response(jsonify(product_data), 200)
 
@@ -36,13 +36,13 @@ def add_product():
 
 @products.route('/products/<int:id>', methods=['PATCH'])
 def update_product_details(id):
-    image = Product.query.filter_by(id = id).first()
+    products = Product.query.filter_by(id = id).first()
     data = request.get_json()
     products = ProductSchema().load(data)
     for field, value in products.items():
-        setattr(image, field, value)
-    db.session.add(image)
+        setattr(products, field, value)
+    db.session.add(products)
     db.session.commit() 
 
-    products_data = ProductSchema().dump(image)
+    products_data = ProductSchema().dump(products)
     return make_response(jsonify(products_data))

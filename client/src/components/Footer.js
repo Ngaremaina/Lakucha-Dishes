@@ -2,13 +2,13 @@ import React from "react";
 
 const Footer = () => {
   return (
-      <div className="container my-5">
+      <div className="container-fluid my-3">
         {/* Footer */}
         <footer className="text-center text-lg-start text-white" style={{backgroundColor: '#45526e'}}>
           {/* Grid container */}
           <div className="container p-4 pb-0">
             {/* Section: Links */}
-            <section className>
+            <section>
               {/*Grid row*/}
               <div className="row">
                 {/* Grid column */}
@@ -32,7 +32,7 @@ const Footer = () => {
                     <a className="text-white">Lunch</a>
                   </p>
                   <p>
-                    <a className="text-white">Supper/Dinner</a>
+                    <a className="text-white">Dinner</a>
                   </p>
                   <p>
                     <a className="text-white">Beverages</a>
