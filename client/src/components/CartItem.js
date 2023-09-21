@@ -2,18 +2,21 @@ import React from "react";
 
 const CartItem = ({id, image, description, price, name, handleDelete}) => {
     let count = 0
+    let text = document.getElementById("number")
     const handleAddCount = () => {
         count = count + 1
-        console.log(count)
-        return <p>{count}</p>
+        text.textContent = count
     }
-    // console.log(handleAddCount())
-    // const handleRemoveCount =() => {
-    //     count = count - 1
-    //     console.log(count)
-    // }
-    // console.log(handleCount())
-    // console.log(count)
+    const handleRemoveCount =() => {
+        if (count === 1 || count <= 0){
+            text.textContent =  1
+        }
+        else{
+            count = count - 1
+            text.textContent = count
+        }   
+    }
+   
     return(
         <div className="row border-top border-bottom">
             <div className="row main align-items-center">
@@ -24,9 +27,9 @@ const CartItem = ({id, image, description, price, name, handleDelete}) => {
             </div>
             <div className="col">
                 <div className="row p-4">
-                <button className="px-2 btn mx-3">-</button>
-                <p className="my-2">1</p>
-                <button className="px2 btn mx-3" onClick={() => handleAddCount()}>+</button>
+                <button className="px-2 btn mx-3" onClick={() => handleRemoveCount()}>-</button>
+                <p className="my-2" id = "number">1</p>
+                <button className="px-2 btn mx-3" onClick={() => handleAddCount()}>+</button>
                 </div>
                 
             </div>

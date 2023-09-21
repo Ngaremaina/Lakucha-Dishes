@@ -2,7 +2,6 @@ import React from "react";
 import FoodItem from "./FoodItem";
 
 const FoodList = ({products, handleCart}) => {
-    var rating = 0
     const displayFood = products?.map(food => {
         return <FoodItem key = {food.id} name = {food.name} image = {food.image} description={food.description} price={food.price} handleCart={handleCart}/>
     })
