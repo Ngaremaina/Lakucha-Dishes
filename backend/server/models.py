@@ -23,6 +23,7 @@ class Client(db.Model):
     image = db.Column(db.String(255))
 
     auth = db.relationship("Auth", backref = "client")
+    cart = db.relationship("Cart", backref = "client")
     
 class Admin(db.Model):
     __tablename__ = "admin"
@@ -79,3 +80,4 @@ class Cart(db.Model):
     price = db.Column(db.Integer)
     description = db.Column(db.String(255))
     image = db.Column(db.String(255))
+    category_id = db.Column(db.Integer, db.ForeignKey("client.id"))
