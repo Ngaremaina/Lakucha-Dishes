@@ -11,6 +11,12 @@ def get_category():
     profile_data = CategorySchema(many = True).dump(category_list)  
     return make_response(jsonify(profile_data), 200)
 
+@category.route("/category/<string:name>", methods = ["GET"])
+def get_product(name):
+    product = Category.query.filter_by(name = name).first()
+    product_data = CategorySchema().dump(product)
+    return make_response(jsonify(product_data), 200)
+
 @category.route("/category/<int:id>", methods = ["DELETE"])
 def delete_category(id):
     category = Category.query.filter_by(id = id).first()

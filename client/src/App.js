@@ -7,10 +7,18 @@ import NavBar from './components/NavBar';
 import DetailsPage from './components/DetailsPage';
 import Login from './components/Login';
 import Register from './components/Register';
+import Contact from './components/Contact';
 
 function App() {
   const [products, setProducts] = useState([])
   const [product, setProduct ] = useState({})
+
+  const fetchCategory = async (name) => {
+    const response = await fetch(`/category/${name}`)
+    const data = await response.json()
+    return setProducts(data.product)
+    // console.log(data.product)
+  }
 
   const fetchingProducts = async () => {
     const response = await fetch("/products")
@@ -48,10 +56,11 @@ function App() {
     <div className="App">
       <NavBar />
       <Routes>
-        <Route path="/" element = {<FoodList products={products} />}></Route>
+        <Route path="/" element = {<FoodList products={products} fetchCategory = {fetchCategory}/>}></Route>
         <Route path="/:name" element = {<DetailsPage getProduct={fetchingProduct} product={product}/>}></Route>
         <Route path ="/login" element = {<Login loginUser={loginUser}/>}></Route>
         <Route path="/register" element = {<Register registerUser = {registerUser} />}></Route>
+        <Route path="/contact us" element = {<Contact />}></Route>
       </Routes>
       <Footer/>
     </div>

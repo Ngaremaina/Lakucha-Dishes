@@ -23,27 +23,34 @@ class AuthSchema(Schema):
     email = fields.String()
     password = fields.String()
     role = fields.String()
+    
     client = fields.Nested(ClientSchema, many=True)
     admin = fields.Nested(AdminSchema, many=True)
 
-
-class CategorySchema(Schema):
-    id = fields.Integer()
-    product_id = fields.Integer()
-    name = fields.String()
-
-class RatingSchema(Schema):
-    id = fields.Integer()
-    product_id = fields.Integer()
-    rate = fields.Integer()
-
 class ProductSchema(Schema):
     id = fields.Integer()
+    category_id = fields.Integer()
+    rating_id = fields.Integer()
     name = fields.String()
     price = fields.Integer()
     image = fields.String()
     quantity = fields.Integer()
     description = fields.String()
 
-    category = fields.Nested(CategorySchema, many=True)
-    rating = fields.Nested(RatingSchema, many=True)
+class CategorySchema(Schema):
+    id = fields.Integer()
+    name = fields.String()
+
+    product = fields.Nested(ProductSchema, many=True)
+
+class RatingSchema(Schema):
+    id = fields.Integer()
+    rate = fields.Integer()
+
+    rating = fields.Nested(ProductSchema, many=True)
+
+class ContactSchema(Schema):
+    id = fields.Integer()
+    username = fields.String()
+    email = fields.String()
+    message = fields.String()
