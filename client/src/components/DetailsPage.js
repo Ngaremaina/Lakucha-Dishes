@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import DetailsItem from "./DetailsItem";
 
-const DetailsPage = ({getProduct, product}) => {
+const DetailsPage = ({getProduct, product, handleCart}) => {
     var group = ""
     var rating = 0
     const {name} = useParams()

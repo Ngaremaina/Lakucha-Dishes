@@ -2,6 +2,7 @@ from server import db
 
 class Auth(db.Model):
     __tablename__ = "auth"
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255))
     email = db.Column(db.String(255))
@@ -10,6 +11,7 @@ class Auth(db.Model):
 
 class Client(db.Model):
     __tablename__ = "client"
+
     id = db.Column(db.Integer, primary_key=True)
     auth_id = db.Column(db.Integer, db.ForeignKey("auth.id"))
     firstname = db.Column(db.String(255))
@@ -24,6 +26,7 @@ class Client(db.Model):
     
 class Admin(db.Model):
     __tablename__ = "admin"
+
     id = db.Column(db.Integer, primary_key = True)
     auth_id = db.Column(db.Integer, db.ForeignKey("auth.id"))
     firstname = db.Column(db.String(255))
@@ -35,6 +38,7 @@ class Admin(db.Model):
 
 class Product(db.Model):
     __tablename__ = "product"
+
     id = db.Column(db.Integer, primary_key=True)
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
     rating_id = db.Column(db.Integer, db.ForeignKey("rating.id"))
@@ -46,6 +50,7 @@ class Product(db.Model):
 
 class Category(db.Model):
     __tablename__ = "category"
+
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(255))
     product = db.relationship("Product", backref = "category")
@@ -65,3 +70,12 @@ class Contact(db.Model):
     username = db.Column(db.String(255))
     email = db.Column(db.String(255))
     message = db.Column(db.String(255))
+
+class Cart(db.Model):
+    __tablename__ = "cart"
+
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(255))
+    price = db.Column(db.Integer)
+    description = db.Column(db.String(255))
+    image = db.Column(db.String(255))

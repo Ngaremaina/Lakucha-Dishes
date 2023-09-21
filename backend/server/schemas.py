@@ -54,3 +54,10 @@ class ContactSchema(Schema):
     username = fields.String()
     email = fields.String()
     message = fields.String()
+
+class CartSchema(Schema):
+    id = fields.Integer()
+    name = fields.String()
+    price = fields.Integer()
+    description = fields.String()
+    image = fields.String()

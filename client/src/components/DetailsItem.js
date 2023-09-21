@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const DetailsItem = ({image, category, name, price, description, rate}) => {
+const DetailsItem = ({image, category, name, price, description, rate, handleCart}) => {
     return(
         <div className="container my-5 py-2">
         <div className="row">
@@ -18,7 +18,7 @@ const DetailsItem = ({image, category, name, price, description, rate}) => {
            
             <p className="lead">{description}</p>
             {/* <button className="btn btn-outline-dark" onClick={() => addProduct(product)}>Add to Cart</button> */}
-            <Link to="/cart" className="btn btn-primary mx-3">Go to Cart</Link>
+            <Link to="/cart" className="btn btn-primary mx-3" onClick={() => handleCart(name, price, description)}>Go to Cart</Link>
           </div>
         </div>
       </div>
