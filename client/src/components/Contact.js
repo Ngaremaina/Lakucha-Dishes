@@ -32,7 +32,7 @@ const Contact = ({contactUser}) => {
                             </div>
                             <div className="form my-3">   
                                 <label>Message</label>
-                                <input type="text" className="form-control" id="Message" placeholder="Type your message" onChange={handleChange} name="message" value={user.message}/>
+                                <textarea type="text" className="form-control" id="Message" placeholder="Type your message" onChange={handleChange} name="message" value={user.message} rows={3}></textarea>
                             </div>
                             
                             <div className="text-center">
