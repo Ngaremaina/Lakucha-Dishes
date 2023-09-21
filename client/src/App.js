@@ -95,10 +95,10 @@ function App() {
       <Routes>
         <Route path="/" element = {<FoodList products={products} fetchCategory = {fetchCategory} handleCart={handleCart}/>}></Route>
         <Route path="/:name" element = {<DetailsPage getProduct={fetchingProduct} product={product} handleCart={handleCart}/>}></Route>
-        <Route path ="/login" element = {<Login loginUser={loginUser}/>}></Route>
-        <Route path="/register" element = {<Register registerUser = {registerUser} />}></Route>
+        <Route path ="/signin" element = {<Login loginUser={loginUser}/>}></Route>
+        <Route path="/signup" element = {<Register registerUser = {registerUser} />}></Route>
         <Route path="/contact us" element = {<Contact contactUser = {contactUser}/>}></Route>
-        <Route path="/cart" element = {<Cart products = {cart} handleDelete={handleDelete}/>}></Route>
+        <Route path="/mycart" element = {<Cart products = {cart} handleDelete={handleDelete}/>}></Route>
         <Route path="/about us" element = {<About />}></Route>
       </Routes>
       <Footer fetchCategory = {fetchCategory}/>

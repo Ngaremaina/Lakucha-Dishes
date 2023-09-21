@@ -39,9 +39,9 @@ const Footer = ({fetchCategory}) => {
           <div className="col">
             <h5 className="text-uppercase" style={{color:"#FFFC31"}}>Social Link</h5>
             <ul className="nav flex-column">
-              <li className="nav-item mb-2"><Link to="www.facebook.com" className="nav-link p-0 text-white"><i className="fab fa-facebook-f" /> Facebook</Link></li>
-              <li className="nav-item mb-2"><Link to="www.twitter.com" className="nav-link p-0 text-white"><i className="fab fa-twitter" /> Twitter</Link></li>
-              <li className="nav-item mb-2"><Link to="www.instagram.com" className="nav-link p-0 text-white"><i className="fab fa-instagram" /> Instagram</Link></li>
+              <li className="nav-item mb-2"><Link to="https://facebook.com" className="nav-link p-0 text-white"><i className="fab fa-facebook-f" /> Facebook</Link></li>
+              <li className="nav-item mb-2"><Link to="https://twitter.com" className="nav-link p-0 text-white"><i className="fab fa-twitter" /> Twitter</Link></li>
+              <li className="nav-item mb-2"><Link to="https://instagram.com" className="nav-link p-0 text-white"><i className="fab fa-instagram" /> Instagram</Link></li>
             </ul>
           </div>
         </footer>

@@ -37,13 +37,13 @@ const NavBar = ({fetchCategory, fetchProducts}) => {
             <div>
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <NavLink className="nav-link text-white" to="/login"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</NavLink>
+                        <NavLink className="nav-link text-white" to="/signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</NavLink>
                         </li>
                         <li className="nav-item">
-                        <NavLink className="nav-link text-white" to="/register"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</NavLink>
+                        <NavLink className="nav-link text-white" to="/signup"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</NavLink>
                         </li>
                         <li className="nav-item">
-                        <NavLink className="nav-link text-white" to="/cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart</NavLink>
+                        <NavLink className="nav-link text-white" to="/mycart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart</NavLink>
                     </li>
                 </ul>
             </div>
