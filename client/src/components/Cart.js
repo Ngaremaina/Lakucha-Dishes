@@ -6,7 +6,6 @@ const Cart = ({handleDelete}) => {
     const [products, setProduct] = useState([])
     useEffect(() => {
         getCart()
-
     },[])
     const getCart = async () => {      
           const response = await fetch("/cart")
@@ -23,9 +22,8 @@ const Cart = ({handleDelete}) => {
             quantity:quantity,
             image:image,
             total:total
-
         }
-        console.log(product)
+        // console.log(product)
         fetch(`/cart/${id}`,{
             method:"PATCH",
             headers: {"Content-Type": "application/json"},
@@ -35,7 +33,7 @@ const Cart = ({handleDelete}) => {
     }
     
     let grandTotal = total + 250
-    console.log(grandTotal)
+    // console.log(grandTotal)
     const displayCart = products.map(item => {
         return <CartItem key = {item.id} id = {item.id} image = {item.image} description = {item.description} name = {item.name} price = {item.price} handleDelete={handleDelete} updateCart = {updateCart} quantity={item.quantity} total = {item.total}/>
     })
