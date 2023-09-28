@@ -1,8 +1,19 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import CartItem from "./CartItem";
 import { Link } from "react-router-dom";
 
-const Cart = ({products, handleDelete}) => {
+const Cart = ({handleDelete}) => {
+    const [products, setProduct] = useState([])
+    useEffect(() => {
+        getCart()
+
+    },[])
+    const getCart = async () => {      
+          const response = await fetch("/cart")
+          const data = await response.json()
+          return setProduct(data)
+    }
+      
     let total = 0
     function updateCart(id, name, price, description, image, total, quantity){
         let product = {

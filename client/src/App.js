@@ -14,7 +14,7 @@ import About from './components/About';
 function App() {
   const [products, setProducts] = useState([])
   const [product, setProduct ] = useState({})
-  const [cart, setCart] = useState([])
+  // const [cart, setCart] = useState([])
 
   const fetchCategory = async (name) => {
     const response = await fetch(`/category/${name}`)
@@ -35,7 +35,7 @@ function App() {
   }
   useEffect(() => {
     fetchingProducts()
-    getCart()
+    // getCart()
   },[])
 
   const loginUser = (user) => {
@@ -57,7 +57,8 @@ function App() {
   }
 
   const handleAddtoCart = (name, price, description, image, quantity, total) => {
-    fetch("/cart",{
+    // e.preventDefault();
+     fetch("/cart",{
       method:"POST",
       headers:{"Content-Type":"application/json", "Accept": "application"},
       body:JSON.stringify({
@@ -70,12 +71,19 @@ function App() {
       })
     })
   }
+  // const[err, setErr] = useState("")
+  // const getCart = async () => {
+  //   // e.preventDefault();
+    
+  //   try{
 
-  const getCart = async () => {
-    const response = await fetch("/cart")
-    const data = await response.json()
-    return setCart(data)
-  }
+  //     const response = await fetch("/cart")
+  //     const data = await response.json()
+  //     return setCart(data)
+  //   }catch(err){
+  //       console.log(setErr)
+  //   }
+  // }
 
   const handleDelete = (id) => {
     fetch(`/cart/${id}`,{
@@ -100,7 +108,7 @@ function App() {
         <Route path ="/signin" element = {<Login loginUser={loginUser}/>}></Route>
         <Route path="/signup" element = {<Register registerUser = {registerUser} />}></Route>
         <Route path="/contact us" element = {<Contact contactUser = {contactUser}/>}></Route>
-        <Route path="/mycart" element = {<Cart products = {cart} handleDelete={handleDelete}/>}></Route>
+        <Route path="/mycart" element = {<Cart handleDelete={handleDelete}/>}></Route>
         <Route path="/about us" element = {<About />}></Route>
       </Routes>
       <Footer fetchCategory = {fetchCategory}/>
