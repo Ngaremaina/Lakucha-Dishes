@@ -38,8 +38,8 @@ def add_category():
 def update_category_details(id):
     category = Category.query.filter_by(id = id).first()
     data = request.get_json()
-    category = CategorySchema().load(data)
-    for field, value in category.items():
+    categories = CategorySchema().load(data)
+    for field, value in categories.items():
         setattr(category, field, value)
     db.session.add(category)
     db.session.commit() 

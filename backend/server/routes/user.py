@@ -2,6 +2,7 @@ from flask import Blueprint, make_response, jsonify, request
 from server.models import Auth
 from server.schemas import AuthSchema
 from server import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 users = Blueprint("users",__name__)
 
@@ -36,14 +37,51 @@ def add_users():
     return make_response(jsonify(users_schema),201)
 
 @users.route('/users/<int:id>', methods=['PATCH'])
-def update_users_details(id):
-    users = Auth.query.filter_by(id = id).first()
+def update_user_details(id):
+    user = Auth.query.filter_by(id = id).first()
     data = request.get_json()
     users = AuthSchema().load(data)
     for field, value in users.items():
-        setattr(users, field, value)
-    db.session.add(users)
+        setattr(user, field, value)
+    db.session.add(user)
     db.session.commit() 
 
-    users_data = AuthSchema().dump(users)
-    return make_response(jsonify(users_data),200)
+    users_data = AuthSchema().dump(user)
+    return make_response(jsonify(users_data))
+
+@users.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data["email"]
+    password = data["password"]
+    user = Auth.query.filter_by(email=email).first()
+    if not user or not check_password_hash(user.password, password):
+        return jsonify({'message': 'Wrong Email or Password'}), 401
+    return make_response(jsonify(user),200)
+
+@users.route('/signup', methods=['POST'])
+def signup():
+    data=request.get_json()
+    username = data["username"]
+    email = data["email"]
+    password = data["password"]
+    role = data["role"]    
+    
+    password_hash = generate_password_hash(password)
+
+    if Auth.query.filter_by(email=email).first():
+        return jsonify(detail = 'User exists')
+    
+    else:
+        nuser=Auth(
+            email=email,
+            password=password_hash,
+            username=username, 
+            role = role
+        )    
+        db.session.add(nuser)
+        db.session.commit()
+        response_body={f'Welcome {nuser.username}':True,'message':'You are added successfully'}
+        res=make_response(jsonify(response_body),201)
+        res.headers["Content-Type"]="application/json"
+        return res

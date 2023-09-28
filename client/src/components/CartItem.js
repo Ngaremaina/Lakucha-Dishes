@@ -1,10 +1,6 @@
 import React from "react";
 
-const CartItem = ({id, image, description, price, name, handleDelete}) => {
-    let count = 1
-    // let text = document.getElementById("number")
-    // console.log(text)
-    let result = 1
+const CartItem = ({id, image, description, price, name, handleDelete, updateCart, quantity, total}) => {
     
     return(
         <div className="row border-top border-bottom">
@@ -17,37 +13,39 @@ const CartItem = ({id, image, description, price, name, handleDelete}) => {
             <div className="col">
                 <div className="row p-4">
                 <button className="px-2 btn mx-3" onClick={() => {
-                    let text = document.getElementById("number")
-                    let total = document.getElementById("total")
-                    if (text.innerText <= 1){
-                        text.innerText = 1
-                        console.log(price * count)
-                        result = count * price
-                        total.innerText = count * price
-                        
+                    // let text = document.getElementById("number")
+                    // let totalPrice = document.getElementById("total")
+                    if (quantity <= 1){
+                        quantity = 1
+                        total = quantity * price
+                        // totalPrice.innerText = total
+                        updateCart(id, name, price, description, image, total, quantity)
                     }
                     else{
-                        count = count - 1
-                        text.innerText = count
-                        result = count * price 
-                        total.innerText = price * count
-
+                        quantity = quantity - 1
+                        // text.innerText = quantity
+                        total = quantity * price 
+                        // totalPrice.innerText = total
+                        updateCart(id, name, price, description, image, total, quantity)
                     }
-                    console.log(result)                     
+
                 }}>-</button>
-                <p className="my-2" id = "number">1</p>
+                <p className="my-2" id = "number">{quantity}</p>
                 <button className="px-2 btn mx-3" onClick={() => {
-                    let text = document.getElementById("number")
-                    let total = document.getElementById("total")
-                    count = count + 1
-                    text.innerText = count
-                    total.innerText = price  * count
+                    // let text = document.getElementById("number")
+                    // let totalPrice = document.getElementById("total")
+                    quantity = quantity + 1
+                    // text.innerText = quantity
+                    total = quantity * price
+                    updateCart(id, name, price, description, image, total, quantity)
+                    // totalPrice.innerText = total
+
 
                 }}>+</button>
                 </div>
                 
             </div>
-            <div className="col"><div className="row"><p className="mt-3" >Kshs. <span id="total">{price}</span></p><button className="close" onClick={() => handleDelete(id)}>✕</button></div></div>
+            <div className="col"><div className="row"><p className="mt-3" >Kshs. <span id="total">{total}</span></p><button className="close" onClick={() => handleDelete(id)}>✕</button></div></div>
             </div>
         </div>
     )

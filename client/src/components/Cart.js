@@ -3,10 +3,30 @@ import CartItem from "./CartItem";
 import { Link } from "react-router-dom";
 
 const Cart = ({products, handleDelete}) => {
-    // console.log(products)
+    let total = 0
+    function updateCart(id, name, price, description, image, total, quantity){
+        let product = {
+            name:name,
+            price:price,
+            description:description,
+            quantity:quantity,
+            image:image,
+            total:total
+
+        }
+        console.log(product)
+        fetch(`/cart/${id}`,{
+            method:"PATCH",
+            headers: {"Content-Type": "application/json"},
+            body:JSON.stringify(product)
+        })
+        
+    }
+    
+    let grandTotal = total + 250
+    console.log(grandTotal)
     const displayCart = products.map(item => {
-        // console.log(item)
-        return <CartItem key = {item.id} id = {item.id} image = {item.image} description = {item.description} name = {item.name} price = {item.price} handleDelete={handleDelete}/>
+        return <CartItem key = {item.id} id = {item.id} image = {item.image} description = {item.description} name = {item.name} price = {item.price} handleDelete={handleDelete} updateCart = {updateCart} quantity={item.quantity} total = {item.total}/>
     })
     return(
         <div className="card">
@@ -27,7 +47,7 @@ const Cart = ({products, handleDelete}) => {
                 <hr />
                 <div className="row">
                     <div className="col" style={{paddingLeft: 0}}>ITEMS </div>
-                    <div className="col text-right">Kshs. 132.00</div>
+                    <div className="row">Kshs. <p className="px-2">2</p></div>
                 </div>
                 <form>
                     <p>SHIPPING</p>
@@ -37,7 +57,7 @@ const Cart = ({products, handleDelete}) => {
                 </form>
                 <div className="row" style={{borderTop: '1px solid rgba(0,0,0,.1)', padding: '2vh 0'}}>
                     <div className="col">TOTAL PRICE</div>
-                    <div className="col text-right">Kshs. 137.00</div>
+                    <div className="row">Kshs. <p className="px-2">{grandTotal}</p></div>
                 </div>
                 <button className="btn">CHECKOUT</button>
                 </div>

@@ -49,14 +49,14 @@ function App() {
   }
 
   const registerUser = (user) => {
-    fetch("/users",{
+    fetch("/re",{
       method:"POST",
       headers:{"Content-Type":"application/json", "Accept": "application"},
       body:JSON.stringify(user)
     })
   }
 
-  const handleCart = (name, price, description, image) => {
+  const handleAddtoCart = (name, price, description, image, quantity, total) => {
     fetch("/cart",{
       method:"POST",
       headers:{"Content-Type":"application/json", "Accept": "application"},
@@ -64,7 +64,9 @@ function App() {
         name:name,
         price:price,
         description:description,
-        image:image
+        image:image,
+        quantity:quantity, 
+        total:total
       })
     })
   }
@@ -93,8 +95,8 @@ function App() {
     <div className="App">
       <NavBar fetchCategory = {fetchCategory} fetchingProducts = {fetchingProducts}/>
       <Routes>
-        <Route path="/" element = {<FoodList products={products} fetchCategory = {fetchCategory} handleCart={handleCart}/>}></Route>
-        <Route path="/:name" element = {<DetailsPage getProduct={fetchingProduct} product={product} handleCart={handleCart}/>}></Route>
+        <Route path="/" element = {<FoodList products={products} fetchCategory = {fetchCategory} handleAddtoCart={handleAddtoCart}/>}></Route>
+        <Route path="/:name" element = {<DetailsPage getProduct={fetchingProduct} product={product} handleAddtoCart={handleAddtoCart}/>}></Route>
         <Route path ="/signin" element = {<Login loginUser={loginUser}/>}></Route>
         <Route path="/signup" element = {<Register registerUser = {registerUser} />}></Route>
         <Route path="/contact us" element = {<Contact contactUser = {contactUser}/>}></Route>

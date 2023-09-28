@@ -80,4 +80,6 @@ class Cart(db.Model):
     price = db.Column(db.Integer)
     description = db.Column(db.String(255))
     image = db.Column(db.String(255))
-    category_id = db.Column(db.Integer, db.ForeignKey("client.id"))
+    quantity = db.Column(db.Integer)
+    total = db.Column(db.Integer)
+    client_id = db.Column(db.Integer, db.ForeignKey("client.id"))

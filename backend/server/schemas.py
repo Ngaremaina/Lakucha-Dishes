@@ -62,3 +62,5 @@ class CartSchema(Schema):
     description = fields.String()
     image = fields.String()
     client_id = fields.Integer()
+    quantity = fields.Integer()
+    total = fields.Integer()

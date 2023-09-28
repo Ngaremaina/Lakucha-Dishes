@@ -34,15 +34,15 @@ def add_product():
     product_schema = ProductSchema().dump(new_product)
     return make_response(jsonify(product_schema))
 
-@products.route('/products/<int:id>', methods=['PATCH'])
+@products.route('/users/<int:id>', methods=['PATCH'])
 def update_product_details(id):
-    products = Product.query.filter_by(id = id).first()
+    product = Product.query.filter_by(id = id).first()
     data = request.get_json()
     products = ProductSchema().load(data)
     for field, value in products.items():
-        setattr(products, field, value)
-    db.session.add(products)
+        setattr(product, field, value)
+    db.session.add(product)
     db.session.commit() 
 
-    products_data = ProductSchema().dump(products)
-    return make_response(jsonify(products_data))
+    users_data = ProductSchema().dump(product)
+    return make_response(jsonify(users_data))
