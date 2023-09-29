@@ -3,11 +3,10 @@ import CartItem from "./CartItem";
 import { Link } from "react-router-dom";
 
 
-const Cart = ({addSales}) => {
+const Cart = () => {
     const [products, setProduct] = useState([])
     let allPrices = []
     let allitems = []
-    let name = ""
   
     useEffect(() => {
         getCart()
@@ -57,7 +56,6 @@ const Cart = ({addSales}) => {
     const displayCart = products.map(item => {
         allPrices.push(item.total)
         allitems.push(item.id)
-        name = item.name
         return <CartItem key = {item.id} id = {item.id} image = {item.image} description = {item.description} name = {item.name} price = {item.price} handleDelete={handleDelete} updateCart = {updateCart} quantity={item.quantity} total = {item.total}/>
     })
     let grandPrice = 0
@@ -66,7 +64,8 @@ const Cart = ({addSales}) => {
     const totalPrice =  grandTotal + 250
     const granditems = allitems.reduce((accumulator, currentValue) => accumulator + currentValue, totalitems)
 
-    addSales(granditems,totalPrice, name)
+    
+    // addSales(granditems,totalPrice, name)
 
 
     return(

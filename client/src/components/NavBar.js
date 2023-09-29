@@ -6,7 +6,7 @@ const NavBar = ({fetchCategory, fetchProducts}) => {
         <nav className="navbar navbar-expand-lg sticky-top" style={{backgroundColor:"#393E41"}}>
         <div className="container-fluid">
 
-            <NavLink className="navbar-brand text-white" to="/">Lakucha Dishes</NavLink>
+            <NavLink className="navbar-brand text-white" onClick = {() => fetchProducts()} to="/">Lakucha Dishes</NavLink>
           
             <div className="justify-content-center">
                 <ul className="navbar-nav">            
@@ -17,9 +17,9 @@ const NavBar = ({fetchCategory, fetchProducts}) => {
                         <div className="dropdown">
                             <NavLink className="nav-link text-white">Menu</NavLink>
                             <div className="dropdown-content">
-                                <Link className="nav-link text-white" onClick={() => fetchCategory("Breakfast")} to="/">Breakfast</Link>
-                                <Link className="nav-link text-white" onClick={() => fetchCategory("Lunch")} to="/">Lunch</Link>
-                                <Link className="nav-link text-white" onClick={() => fetchCategory("Dinner")} to="/">Dinner</Link>
+                                <Link className="nav-link text-white" onClick={() => fetchCategory("Breakfast")} to="/menu">Breakfast</Link>
+                                <Link className="nav-link text-white" onClick={() => fetchCategory("Lunch")} to="/menu">Lunch</Link>
+                                <Link className="nav-link text-white" onClick={() => fetchCategory("Dinner")} to="/menu">Dinner</Link>
                             </div>
                         </div>
                     

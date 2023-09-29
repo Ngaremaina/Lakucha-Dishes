@@ -12,6 +12,7 @@ import Cart from './components/Cart';
 import About from './components/About';
 import Checkout from './components/Checkout';
 import Payment from './components/Payment';
+import Menu from './components/Menu';
 
 function App() {
   const [products, setProducts] = useState([])
@@ -163,6 +164,7 @@ function App() {
         <Route path="/about us" element = {<About />}></Route>
         <Route path="/checkout" element = {<Checkout addShipping={addShipping}/>}></Route>
         <Route path="payment" element = {<Payment addPayment={addPayment} />}></Route>
+        <Route path="/menu" element = {<Menu products={products} fetchCategory = {fetchCategory}/>}></Route>
       </Routes>
       <Footer fetchCategory = {fetchCategory}/>
     </div>

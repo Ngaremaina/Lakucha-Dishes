@@ -31,9 +31,9 @@ const Footer = ({fetchCategory}) => {
           <div className="col">
             <h5 className="text-uppercase" style={{color:"#FFFC31"}}>Menu</h5>
             <ul className="nav flex-column">
-              <li className="nav-item mb-2"><Link className="nav-link p-0 text-white" onClick={() => fetchCategory("Breakfast")} to="/">Breakfast</Link></li>
-              <li className="nav-item mb-2"><Link className="nav-link p-0 text-white" onClick={() => fetchCategory("Lunch")} to="/">Lunch</Link></li>
-              <li className="nav-item mb-2"><Link className="nav-link p-0 text-white" onClick={() => fetchCategory("Dinner")} to="/">Dinner</Link></li>
+              <li className="nav-item mb-2"><Link className="nav-link p-0 text-white" onClick={() => fetchCategory("Breakfast")} to="/menu">Breakfast</Link></li>
+              <li className="nav-item mb-2"><Link className="nav-link p-0 text-white" onClick={() => fetchCategory("Lunch")} to="/menu">Lunch</Link></li>
+              <li className="nav-item mb-2"><Link className="nav-link p-0 text-white" onClick={() => fetchCategory("Dinner")} to="/menu">Dinner</Link></li>
             </ul>
           </div>
           <div className="col">

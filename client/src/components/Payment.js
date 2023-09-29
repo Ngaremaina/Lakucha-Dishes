@@ -2,41 +2,36 @@ import React, { useEffect, useState } from "react";
 
 
 const Payment = ({addPayment}) => {
-    const [sales, setSales] = useState([])
+    const [products, setProducts] = useState([])
     useEffect(() => {
         const getSales = async () => {
-            const response = await fetch("/sales")
+            const response = await fetch("/cart")
             const data = await response.json()
-            return setSales(data)
+            return setProducts(data)
         }
         getSales()
 
     },[])
-    // console.log(sales)
-
-    let total = 0
-    let items = 0
     let allPrices = []
     let allitems = []
 
-    sales?.map(sale => {
-        allitems.push(sale.quantity)
-        allPrices.push(sale.amount)
+    products?.map(item => {
+        allPrices.push(item.total)
+        allitems.push(item.quantity)
         return null
     })
-    const grandTotal = allPrices.reduce((accumulator, currentValue) => accumulator + currentValue, total)
-    var totalPrice =  grandTotal + 250
-    const granditems = allitems.reduce((accumulator, currentValue) => accumulator + currentValue, items)
+    let grandPrice = 0
+    let totalitems = 0
+    const grandTotal = allPrices.reduce((accumulator, currentValue) => accumulator + currentValue, grandPrice)
+    const totalPrice =  grandTotal + 250
+    const granditems = allitems.reduce((accumulator, currentValue) => accumulator + currentValue, totalitems)
 
-    // console.log(grandTotal)
-    // console.log(granditems, totalPrice)
     const [payment, setPayment] = useState({
         phone:"",
         amount:totalPrice
     })
     const handleSubmit = (event) => {
         event.preventDefault()
-        // console.log(payment)
         addPayment(payment)
       }
       const handleChange = (event) => {
@@ -55,9 +50,9 @@ const Payment = ({addPayment}) => {
                 </div>
                 <div className="row d-flex justify-content-center">
                     <div className="col-md-5">
-                        <div className="card-header">
+                        <h4 className="text-center">
                             Order Summary
-                        </div>
+                        </h4>
                         <div className="card-body">
                         <table className="table">
                             <thead>
@@ -75,12 +70,8 @@ const Payment = ({addPayment}) => {
                                 </tr>                               
                             </tbody>
                         </table>
-                            
-
                         </div>
-
                     </div>
-
                 </div>
                 <div className="card-body">
                   <form className="needs-validation" noValidate onSubmit={handleSubmit}>
