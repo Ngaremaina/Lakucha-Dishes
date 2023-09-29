@@ -14,7 +14,7 @@ import About from './components/About';
 function App() {
   const [products, setProducts] = useState([])
   const [product, setProduct ] = useState({})
-  
+
   const fetchCategory = async (name) => {
     const response = await fetch(`/category/${name}`)
     const data = await response.json()
@@ -86,7 +86,7 @@ function App() {
         <Route path ="/signin" element = {<Login loginUser={loginUser}/>}></Route>
         <Route path="/signup" element = {<Register registerUser = {registerUser} />}></Route>
         <Route path="/contact us" element = {<Contact contactUser = {contactUser}/>}></Route>
-        <Route path="/mycart" element = {<Cart handleDelete={handleDelete}/>}></Route>
+        <Route path="/mycart" element = {<Cart />}></Route>
         <Route path="/about us" element = {<About />}></Route>
       </Routes>
       <Footer fetchCategory = {fetchCategory}/>
