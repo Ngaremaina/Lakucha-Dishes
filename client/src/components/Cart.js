@@ -13,7 +13,7 @@ const Cart = ({handleDelete}) => {
           return setProduct(data)
     }
       
-    let total = 0
+    let allPrices = []
     function updateCart(id, name, price, description, image, total, quantity){
         let product = {
             name:name,
@@ -29,14 +29,23 @@ const Cart = ({handleDelete}) => {
             headers: {"Content-Type": "application/json"},
             body:JSON.stringify(product)
         })
-        
+        .then(response => {
+            if (response.status === 200){
+                getCart()
+                response.json()
+            }
+        })        
     }
     
-    let grandTotal = total + 250
-    // console.log(grandTotal)
     const displayCart = products.map(item => {
+        allPrices.push(item.total)
         return <CartItem key = {item.id} id = {item.id} image = {item.image} description = {item.description} name = {item.name} price = {item.price} handleDelete={handleDelete} updateCart = {updateCart} quantity={item.quantity} total = {item.total}/>
     })
+    // console.log(totalPrice)
+    let grandPrice = 0
+    const grandTotal = allPrices.reduce((accumulator, currentValue) => accumulator + currentValue, grandPrice)
+    // console.log(grandTotal)
+    const totalPrice =  grandTotal + 250
     return(
         <div className="card">
             <div className="row">
@@ -56,7 +65,7 @@ const Cart = ({handleDelete}) => {
                 <hr />
                 <div className="row">
                     <div className="col" style={{paddingLeft: 0}}>ITEMS </div>
-                    <div className="row">Kshs. <p className="px-2">2</p></div>
+                    <div className="row">Kshs. <p className="px-2">{grandTotal}</p></div>
                 </div>
                 <form>
                     <p>SHIPPING</p>
@@ -66,7 +75,7 @@ const Cart = ({handleDelete}) => {
                 </form>
                 <div className="row" style={{borderTop: '1px solid rgba(0,0,0,.1)', padding: '2vh 0'}}>
                     <div className="col">TOTAL PRICE</div>
-                    <div className="row">Kshs. <p className="px-2">{grandTotal}</p></div>
+                    <div className="row">Kshs. <p className="px-2">{totalPrice}</p></div>
                 </div>
                 <button className="btn">CHECKOUT</button>
                 </div>
