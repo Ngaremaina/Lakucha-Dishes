@@ -30,11 +30,9 @@ const Payment = ({addPayment}) => {
 
     // console.log(grandTotal)
     // console.log(granditems, totalPrice)
-    
-
     const [payment, setPayment] = useState({
         phone:"",
-        amount:grandTotal
+        amount:totalPrice
     })
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -61,7 +59,7 @@ const Payment = ({addPayment}) => {
                             Order Summary
                         </div>
                         <div className="card-body">
-                        <table class="table">
+                        <table className="table">
                             <thead>
                                 <tr>
                                 <th scope="col">Items</th>
