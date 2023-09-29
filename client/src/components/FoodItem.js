@@ -6,7 +6,7 @@ const FoodItem = ({image, name, price, description, handleAddtoCart}) => {
     const total = quantity * price
 
     return(
-        <div className="card" style={{width: '18rem', marginLeft:'5px', marginTop:'3px'}}>
+        <div className="card" style={{width: '19rem', marginLeft:'10px', marginTop:'5px'}}>
             <img src={image} className="card-img-top" alt={name} style={{height: '15rem'}}/>
             <div className="card-body">
                 <h5 className="card-title">{name}</h5>

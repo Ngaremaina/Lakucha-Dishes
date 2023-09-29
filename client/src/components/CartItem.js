@@ -13,34 +13,23 @@ const CartItem = ({id, image, description, price, name, handleDelete, updateCart
             <div className="col">
                 <div className="row p-4">
                 <button className="px-2 btn mx-3" onClick={() => {
-                    // let text = document.getElementById("number")
-                    // let totalPrice = document.getElementById("total")
                     if (quantity <= 1){
                         quantity = 1
                         total = quantity * price
-                        // totalPrice.innerText = total
                         updateCart(id, name, price, description, image, total, quantity)
                     }
                     else{
                         quantity = quantity - 1
-                        // text.innerText = quantity
                         total = quantity * price 
-                        // totalPrice.innerText = total
                         updateCart(id, name, price, description, image, total, quantity)
                     }
 
                 }}>-</button>
                 <p className="my-2" id = "number">{quantity}</p>
                 <button className="px-2 btn mx-3" onClick={() => {
-                    // let text = document.getElementById("number")
-                    // let totalPrice = document.getElementById("total")
                     quantity = quantity + 1
-                    // text.innerText = quantity
                     total = quantity * price
                     updateCart(id, name, price, description, image, total, quantity)
-                    // totalPrice.innerText = total
-
-
                 }}>+</button>
                 </div>
                 
