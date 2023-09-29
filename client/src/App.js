@@ -14,13 +14,11 @@ import About from './components/About';
 function App() {
   const [products, setProducts] = useState([])
   const [product, setProduct ] = useState({})
-  // const [cart, setCart] = useState([])
-
+  
   const fetchCategory = async (name) => {
     const response = await fetch(`/category/${name}`)
     const data = await response.json()
     return setProducts(data.product)
-    // console.log(data.product)
   }
 
   const fetchingProducts = async () => {
@@ -35,7 +33,6 @@ function App() {
   }
   useEffect(() => {
     fetchingProducts()
-    // getCart()
   },[])
 
   const loginUser = (user) => {
@@ -71,26 +68,7 @@ function App() {
       })
     })
   }
-  // const[err, setErr] = useState("")
-  // const getCart = async () => {
-  //   // e.preventDefault();
-    
-  //   try{
 
-  //     const response = await fetch("/cart")
-  //     const data = await response.json()
-  //     return setCart(data)
-  //   }catch(err){
-  //       console.log(setErr)
-  //   }
-  // }
-
-  const handleDelete = (id) => {
-    fetch(`/cart/${id}`,{
-      method:"DELETE",
-      headers:{"Content-Type":"application/json", "Accept": "application"},
-    })
-  }
   const contactUser = (user) => {
     fetch("/contact",{
       method:"POST",

@@ -2,7 +2,7 @@ import React,{useState, useEffect} from "react";
 import CartItem from "./CartItem";
 import { Link } from "react-router-dom";
 
-const Cart = ({handleDelete}) => {
+const Cart = () => {
     const [products, setProduct] = useState([])
     useEffect(() => {
         getCart()
@@ -23,7 +23,6 @@ const Cart = ({handleDelete}) => {
             image:image,
             total:total
         }
-        // console.log(product)
         fetch(`/cart/${id}`,{
             method:"PATCH",
             headers: {"Content-Type": "application/json"},
@@ -36,15 +35,26 @@ const Cart = ({handleDelete}) => {
             }
         })        
     }
+
+    const handleDelete = (id) => {
+        fetch(`/cart/${id}`,{
+          method:"DELETE",
+          headers:{"Content-Type":"application/json", "Accept": "application"},
+        })
+        .then(response => {
+            if (response.status === 200){
+                getCart()
+                response.json()
+            }
+        })
+      }
     
     const displayCart = products.map(item => {
         allPrices.push(item.total)
         return <CartItem key = {item.id} id = {item.id} image = {item.image} description = {item.description} name = {item.name} price = {item.price} handleDelete={handleDelete} updateCart = {updateCart} quantity={item.quantity} total = {item.total}/>
     })
-    // console.log(totalPrice)
     let grandPrice = 0
     const grandTotal = allPrices.reduce((accumulator, currentValue) => accumulator + currentValue, grandPrice)
-    // console.log(grandTotal)
     const totalPrice =  grandTotal + 250
     return(
         <div className="card">
