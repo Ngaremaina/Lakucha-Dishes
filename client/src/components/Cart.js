@@ -2,8 +2,13 @@ import React,{useState, useEffect} from "react";
 import CartItem from "./CartItem";
 import { Link } from "react-router-dom";
 
-const Cart = () => {
+
+const Cart = ({addSales}) => {
     const [products, setProduct] = useState([])
+    let allPrices = []
+    let allitems = []
+    let name = ""
+  
     useEffect(() => {
         getCart()
     },[])
@@ -13,7 +18,7 @@ const Cart = () => {
           return setProduct(data)
     }
       
-    let allPrices = []
+   
     function updateCart(id, name, price, description, image, total, quantity){
         let product = {
             name:name,
@@ -51,11 +56,19 @@ const Cart = () => {
     
     const displayCart = products.map(item => {
         allPrices.push(item.total)
+        allitems.push(item.id)
+        name = item.name
         return <CartItem key = {item.id} id = {item.id} image = {item.image} description = {item.description} name = {item.name} price = {item.price} handleDelete={handleDelete} updateCart = {updateCart} quantity={item.quantity} total = {item.total}/>
     })
     let grandPrice = 0
+    let totalitems = 0
     const grandTotal = allPrices.reduce((accumulator, currentValue) => accumulator + currentValue, grandPrice)
     const totalPrice =  grandTotal + 250
+    const granditems = allitems.reduce((accumulator, currentValue) => accumulator + currentValue, totalitems)
+
+    addSales(granditems,totalPrice, name)
+
+
     return(
         <div className="card">
             <div className="row">
@@ -80,14 +93,12 @@ const Cart = () => {
                 <form>
                     <p>SHIPPING</p>
                     <select><option className="text-muted">Standard-Delivery- Kshs. 250</option></select>
-                    <p>GIVE CODE</p>
-                    <input id="code" placeholder="Enter your code" />
                 </form>
                 <div className="row" style={{borderTop: '1px solid rgba(0,0,0,.1)', padding: '2vh 0'}}>
                     <div className="col">TOTAL PRICE</div>
                     <div className="row">Kshs. <p className="px-2">{totalPrice}</p></div>
                 </div>
-                <button className="btn">CHECKOUT</button>
+                <Link to="/checkout" className="btn">CHECKOUT</Link>
                 </div>
             </div>
         </div>

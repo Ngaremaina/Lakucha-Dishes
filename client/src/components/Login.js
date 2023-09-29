@@ -9,7 +9,6 @@ const Login = ({loginUser}) => {
     const handleSubmit = (event) => {
         event.preventDefault()
         loginUser(user)
-        navigate("/")
     }
     const handleChange = (event) => {
         const input = event.target.name
@@ -33,7 +32,7 @@ const Login = ({loginUser}) => {
                 <input type="password" class="form-control" id="floatingPassword" placeholder="password" onChange={handleChange} name ="password" value={user.password}/>
               </div>
               <div className="my-3">
-                <p>Don't have an account? <Link to="/register" className="text-decoration-underline text-info">Click here to Register</Link> </p>
+                <p>Don't have an account? <Link to="/signup" className="text-decoration-underline text-info">Click here to Register</Link> </p>
               </div>
               <div className="text-center">
                 <button className="my-2 mx-auto btn btn-dark" type="submit">

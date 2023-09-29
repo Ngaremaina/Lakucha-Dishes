@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 const Register = ({registerUser}) => {
-    const navigate = useNavigate()
     const [user, setUser] = useState({
         username:"",
         email:"",
@@ -16,7 +15,6 @@ const Register = ({registerUser}) => {
     const handleSubmit = (event) => {
         event.preventDefault()
         registerUser(user)
-        navigate("/login")
     }
     return(
         <div className="container my-3 py-3">
@@ -42,7 +40,7 @@ const Register = ({registerUser}) => {
                                 <button className="my-2 mx-auto btn btn-dark" type="submit">Register</button>
                             </div>
                             <div className="my-3">
-                                <p>Already have an account? <Link to="/login" className="text-decoration-underline text-info">Click here to Login</Link> </p>
+                                <p>Already have an account? <Link to="/signin" className="text-decoration-underline text-info">Click here to Login</Link> </p>
                             </div>
                         </form>
                     </div>

@@ -17,14 +17,12 @@ class Client(db.Model):
     firstname = db.Column(db.String(255))
     lastname = db.Column(db.String(255))
     phone = db.Column(db.Integer)
-    address = db.Column(db.String(255))
-    city = db.Column(db.String(255))
-    country = db.Column(db.String(255))
     image = db.Column(db.String(255))
 
     auth = db.relationship("Auth", backref = "client")
     cart = db.relationship("Cart", backref = "client")
-    
+   
+     
 class Admin(db.Model):
     __tablename__ = "admin"
 
@@ -83,3 +81,23 @@ class Cart(db.Model):
     quantity = db.Column(db.Integer)
     total = db.Column(db.Integer)
     client_id = db.Column(db.Integer, db.ForeignKey("client.id"))
+
+
+class Shipping(db.Model):
+    __tablename__ = "shipping"
+
+    id = db.Column(db.Integer, primary_key = True)
+    client_id = db.Column(db.Integer, db.ForeignKey("client.id"))
+    firstname = db.Column(db.String(255))
+    lastname = db.Column(db.String(255))
+    region = db.Column(db.String(255))
+    address = db.Column(db.String(255))
+    city = db.Column(db.String(255))
+
+class Sales(db.Model):
+    __tablename__ = "sales"
+
+    id = db.Column(db.Integer, primary_key = True)
+    quantity = db.Column(db.Integer)
+    amount = db.Column(db.Integer)
+    name = db.Column(db.String(255))

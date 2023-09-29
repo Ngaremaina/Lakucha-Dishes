@@ -14,9 +14,6 @@ const DetailsItem = ({image, category, name, price, description, rate, handleAdd
             <h4 className="text-uppercase text-muted">{category}</h4>
             <h1 className="display-5">{name}</h1>
             <h3 className="display-6  my-4">${price}</h3>
-            <p className="lead">
-              {/* <i className="fa fa-star">{rate}</i> */}
-            </p>
            
             <p className="lead">{description}</p>
             <Link to="/mycart" className="btn btn-primary mx-3" onClick={() => handleAddtoCart(name, price, description, image, quantity, total)}>Add to Cart</Link>

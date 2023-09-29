@@ -10,6 +10,14 @@ class ClientSchema(Schema):
     city = fields.String()
     country = fields.String()
 
+class LocationSchema(Schema):
+    id = fields.Integer()
+    client_id = fields.Integer()
+    region = fields.String()
+    address = fields.String()
+    city = fields.String()
+    country = fields.String()
+
 class AdminSchema(Schema):
     id = fields.Integer()
     auth_id = fields.Integer()
@@ -64,3 +72,18 @@ class CartSchema(Schema):
     client_id = fields.Integer()
     quantity = fields.Integer()
     total = fields.Integer()
+
+class ShippingSchema(Schema):
+    id = fields.Integer()
+    client_id = fields.Integer()
+    firstname = fields.String()
+    lastname = fields.String()
+    region = fields.String()
+    address = fields.String()
+    city = fields.String()
+
+class SaleSchema(Schema):
+    id = fields.Integer()
+    quantity = fields.Integer()
+    amount = fields.Integer()
+    name = fields.String()

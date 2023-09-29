@@ -25,17 +25,6 @@ def delete_user(id):
     db.session.commit()
     return make_response(jsonify(message = "user deleted successfully"), 200)
     
-
-@users.route("/users", methods = ["POST"])
-def add_users():
-    data = request.get_json()
-    users = AuthSchema().load(data)
-    new_users = Auth(**users)
-    db.session.add(new_users)
-    db.session.commit()
-    users_schema = AuthSchema().dump(new_users)
-    return make_response(jsonify(users_schema),201)
-
 @users.route('/users/<int:id>', methods=['PATCH'])
 def update_user_details(id):
     user = Auth.query.filter_by(id = id).first()
@@ -57,9 +46,10 @@ def login():
     user = Auth.query.filter_by(email=email).first()
     if not user or not check_password_hash(user.password, password):
         return jsonify({'message': 'Wrong Email or Password'}), 401
-    return make_response(jsonify(user),200)
+    user_data = AuthSchema().dump(user)
+    return make_response(jsonify(user_data),200)
 
-@users.route('/signup', methods=['POST'])
+@users.route('/register', methods=['POST'])
 def signup():
     data=request.get_json()
     username = data["username"]
@@ -81,7 +71,6 @@ def signup():
         )    
         db.session.add(nuser)
         db.session.commit()
-        response_body={f'Welcome {nuser.username}':True,'message':'You are added successfully'}
-        res=make_response(jsonify(response_body),201)
-        res.headers["Content-Type"]="application/json"
-        return res
+    
+        user_data = AuthSchema().dump(nuser)
+        return make_response(jsonify(user_data),200)

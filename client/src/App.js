@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Footer from './components/Footer';
 import FoodList from './components/FoodList';
 import NavBar from './components/NavBar';
@@ -10,11 +10,13 @@ import Register from './components/Register';
 import Contact from './components/Contact';
 import Cart from './components/Cart';
 import About from './components/About';
+import Checkout from './components/Checkout';
+import Payment from './components/Payment';
 
 function App() {
   const [products, setProducts] = useState([])
-  const [product, setProduct ] = useState({})
 
+  const navigate = useNavigate()
   const fetchCategory = async (name) => {
     const response = await fetch(`/category/${name}`)
     const data = await response.json()
@@ -26,35 +28,50 @@ function App() {
     const data = await response.json()
     return setProducts(data)
   }
-  const fetchingProduct = async (name) => {
-    const response = await fetch(`/products/${name}`)
-    const data = await response.json()
-    return setProduct(data)
-  }
+  
   useEffect(() => {
     fetchingProducts()
   },[])
 
   const loginUser = (user) => {
-    fetch("/users", {
+    fetch("/login", {
       method:'POST',
       headers:{"Content-Type":"application/json", "Accept": "application/json"},
       body:JSON.stringify(user)
     })
-    .then(res => res.json())
+    .then(response => {
+      if (response.status === 200){
+        navigate("/")
+        response.json()
+      }
+      else{
+        navigate("/signin")
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
     
   }
 
   const registerUser = (user) => {
-    fetch("/re",{
+    fetch("/register",{
       method:"POST",
       headers:{"Content-Type":"application/json", "Accept": "application"},
       body:JSON.stringify(user)
     })
+    .then(response => {
+      if (response.status === 200){
+        navigate("/signin")
+        response.json()
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   const handleAddtoCart = (name, price, description, image, quantity, total) => {
-    // e.preventDefault();
      fetch("/cart",{
       method:"POST",
       headers:{"Content-Type":"application/json", "Accept": "application"},
@@ -75,19 +92,77 @@ function App() {
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(user)
     })
+    .then(response => {
+      if (response.status === 200){
+        console.log("sucess")
+      }
+    })
   }
+
+  const addShipping = (location) => {
+    fetch("/shippings",{
+      method:"POST", 
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(location)
+    })
+    .then(response => {
+      if (response.status === 200){
+        navigate("/payment")
+        response.json()
+      }
+    })
+    .catch(err => console.log(err))
+
+  }
+
+
+
+  const addPayment = (payment) => {
+    let number = "254" + payment.phone
+    const phone_number = parseInt(number)
+    fetch("/payments", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        phone:phone_number,
+        amount:payment.amount
+      })
+    })
+
+  }
+
+  const addSales =(quantity, amount,name) => {
+    fetch("/sales",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        quantity:quantity,
+        amount:amount,
+        name:name
+      })
+    })
+    .then(response => {
+      if (response.status === 200){
+        response.json()
+      }
+    })
+  }
+
+ 
 
   return (
     <div className="App">
       <NavBar fetchCategory = {fetchCategory} fetchingProducts = {fetchingProducts}/>
       <Routes>
         <Route path="/" element = {<FoodList products={products} fetchCategory = {fetchCategory} handleAddtoCart={handleAddtoCart}/>}></Route>
-        <Route path="/:name" element = {<DetailsPage getProduct={fetchingProduct} product={product} handleAddtoCart={handleAddtoCart}/>}></Route>
+        <Route path="/:name" element = {<DetailsPage handleAddtoCart={handleAddtoCart}/>}></Route>
         <Route path ="/signin" element = {<Login loginUser={loginUser}/>}></Route>
         <Route path="/signup" element = {<Register registerUser = {registerUser} />}></Route>
         <Route path="/contact us" element = {<Contact contactUser = {contactUser}/>}></Route>
-        <Route path="/mycart" element = {<Cart />}></Route>
+        <Route path="/mycart" element = {<Cart addSales={addSales}/>}></Route>
         <Route path="/about us" element = {<About />}></Route>
+        <Route path="/checkout" element = {<Checkout addShipping={addShipping}/>}></Route>
+        <Route path="payment" element = {<Payment addPayment={addPayment} />}></Route>
       </Routes>
       <Footer fetchCategory = {fetchCategory}/>
     </div>

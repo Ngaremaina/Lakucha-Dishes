@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import { useParams } from "react-router-dom";
 import DetailsItem from "./DetailsItem";
 
-const DetailsPage = ({getProduct, product, handleAddtoCart}) => {
-    var group = ""
-    var rating = 0
+const DetailsPage = ({handleAddtoCart}) => {
     const {name} = useParams()
-    getProduct(name)
-
-    // product.category?.map(cat => {group = cat.name })
-    // product.rating?.map(rate => {rating = rate.rate})
+    const [product, setProduct ] = useState({})
+    
+    useEffect(()=>{
+        const fetchingProduct = async () => {
+            const response = await fetch(`/products/${name}`)
+            const data = await response.json()
+            return setProduct(data)
+        }
+        fetchingProduct()
+    },[name])
     
     
     return(
-        <DetailsItem key = {product.id} name = {product.name} image = {product.image} description={product.description} price={product.price} category={group} rate = {rating} handleAddtoCart = {handleAddtoCart} />
+        <DetailsItem key = {product.id} name = {product.name} image = {product.image} description={product.description} price={product.price}  handleAddtoCart = {handleAddtoCart} />
     )
 
 }
