@@ -116,17 +116,15 @@ function App() {
 
   }
 
-
-
-  const addPayment = (payment) => {
-    let number = "254" + payment.phone
+  const addPayment = (phone, total) => {
+    let number = "254" + phone
     const phone_number = parseInt(number)
     fetch("/payments", {
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         phone:phone_number,
-        amount:payment.amount
+        amount:total
       })
     })
 
@@ -148,8 +146,6 @@ function App() {
       }
     })
   }
-
- 
 
   return (
     <div className="App">

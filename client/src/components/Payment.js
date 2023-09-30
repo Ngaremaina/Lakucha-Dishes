@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-
 const Payment = ({addPayment}) => {
     const [products, setProducts] = useState([])
     useEffect(() => {
-        const getSales = async () => {
+        const getTotals = async () => {
             const response = await fetch("/cart")
             const data = await response.json()
             return setProducts(data)
         }
-        getSales()
+        getTotals()
 
     },[])
     let allPrices = []
@@ -26,18 +25,10 @@ const Payment = ({addPayment}) => {
     const totalPrice =  grandTotal + 250
     const granditems = allitems.reduce((accumulator, currentValue) => accumulator + currentValue, totalitems)
 
-    const [payment, setPayment] = useState({
-        phone:"",
-        amount:totalPrice
-    })
+    const [phone, setPhone] = useState("")
     const handleSubmit = (event) => {
         event.preventDefault()
-        addPayment(payment)
-      }
-      const handleChange = (event) => {
-        const input = event.target.id
-        const value = event.target.value
-        setPayment(prev => {return {...prev, [input]:value}})
+        addPayment(phone, totalPrice)
       }
 
     return(
@@ -87,7 +78,7 @@ const Payment = ({addPayment}) => {
                         <label className="form-label">
                           Phone Number
                         </label>
-                        <input type="number" className="form-control" id="phone" placeholder="712345678" value={payment.phone} required onChange={handleChange}/>
+                        <input type="number" className="form-control" id="phone" placeholder="712345678" value={phone} required onChange={e => setPhone(e.target.value)}/>
                         <div className="invalid-feedback">
                           Valid number is required.
                         </div>
