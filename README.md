@@ -54,8 +54,11 @@ Before you begin, make sure you have the following prerequisites installed:
     ```bash
     source venv/bin/activate
    ```
-
-5. Start the application:
+6. Install the requirements:
+   ```bash
+   pip install -r requirements.txt
+   ```
+7. Start the application:
    ```bash
    honcho start -f Procfile.dev
    ```
