@@ -11,9 +11,7 @@ Lakucha Dishes is a web application that allows users to browse a menu, place or
   - [Installation](#installation)
 - [Features](#features)
 - [Usage](#usage)
-- [Contributing](#contributing)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 ## Getting Started
 
