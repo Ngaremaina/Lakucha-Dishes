@@ -79,10 +79,6 @@ Before you begin, make sure you have the following prerequisites installed:
 5. Track the status of your order in real-time.
 6. Enjoy your delicious meal!
 
-## Contributing
-
-Contributions are welcome! Please follow our [contributing guidelines](CONTRIBUTING.md) for more information on how to get started.
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
