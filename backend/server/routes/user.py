@@ -2,6 +2,7 @@ from flask import Blueprint, make_response, jsonify, request
 from server.models import Auth
 from server.schemas import AuthSchema
 from server import db
+from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
 
 users = Blueprint("users",__name__)
@@ -46,8 +47,13 @@ def login():
     user = Auth.query.filter_by(email=email).first()
     if not user or not check_password_hash(user.password, password):
         return jsonify({'message': 'Wrong Email or Password'}), 401
-    user_data = AuthSchema().dump(user)
-    return make_response(jsonify(user_data),200)
+    
+    access_token = create_access_token(identity=email)  
+    return make_response(jsonify({
+        "access_token":access_token,
+        "email":user.email,
+        "username":user.username
+    }), 200)
 
 @users.route('/register', methods=['POST'])
 def signup():

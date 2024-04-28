@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-const Login = ({loginUser}) => {
+import { useAuth } from "./Authentication";
+const Login = () => {
     const [user, setUser] = useState({
         email:"",
         password:""
     })
+    
+    const {loginUser} = useAuth()
+
     const handleSubmit = (event) => {
         event.preventDefault()
         loginUser(user)
+        
     }
     const handleChange = (event) => {
         const input = event.target.name

@@ -1,7 +1,9 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
+import { useAuth } from "./Authentication";
 
 const NavBar = ({fetchCategory, fetchProducts}) => {
+    const { logout, admin } = useAuth()
     return(
         <nav className="navbar navbar-expand-lg sticky-top" style={{backgroundColor:"#393E41"}}>
         <div className="container-fluid">
@@ -37,13 +39,15 @@ const NavBar = ({fetchCategory, fetchProducts}) => {
             <div>
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <NavLink className="nav-link text-white" to="/signin"><i className="fa fa-sign-in" aria-hidden="true"></i> Login</NavLink>
-                        </li>
-                        <li className="nav-item">
-                        <NavLink className="nav-link text-white" to="/signup"><i className="fa fa-user-plus" aria-hidden="true"></i> Register</NavLink>
-                        </li>
-                        <li className="nav-item">
+                        <NavLink className="nav-link text-white">{admin.username}</NavLink>
+                    </li>
+                    
+                    <li className="nav-item">
                         <NavLink className="nav-link text-white" to="/mycart"><i className="fa fa-shopping-cart" aria-hidden="true"></i> Cart</NavLink>
+                    </li>
+                   
+                    <li className="nav-item">
+                        <NavLink className="nav-link text-white" onClick={logout} ><i className="fa fa-sign-in" aria-hidden="true"></i> Logout</NavLink>
                     </li>
                 </ul>
             </div>

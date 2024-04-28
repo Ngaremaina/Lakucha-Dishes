@@ -13,10 +13,11 @@ import About from './components/About';
 import Checkout from './components/Checkout';
 import Payment from './components/Payment';
 import Menu from './components/Menu';
+import { useAuth } from './components/Authentication';
 
 function App() {
   const [products, setProducts] = useState([])
-
+  const { userToken } = useAuth();
   const navigate = useNavigate()
   const fetchCategory = async (name) => {
     const response = await fetch(`/category/${name}`)
@@ -33,44 +34,6 @@ function App() {
   useEffect(() => {
     fetchingProducts()
   },[])
-
-  const loginUser = (user) => {
-    fetch("/login", {
-      method:'POST',
-      headers:{"Content-Type":"application/json", "Accept": "application/json"},
-      body:JSON.stringify(user)
-    })
-    .then(response => {
-      if (response.status === 200){
-        navigate("/")
-        response.json()
-      }
-      else{
-        navigate("/signin")
-      }
-    })
-    .catch(err => {
-      console.log(err)
-    })
-    
-  }
-
-  const registerUser = (user) => {
-    fetch("/register",{
-      method:"POST",
-      headers:{"Content-Type":"application/json", "Accept": "application"},
-      body:JSON.stringify(user)
-    })
-    .then(response => {
-      if (response.status === 200){
-        navigate("/signin")
-        response.json()
-      }
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
 
   const handleAddtoCart = (name, price, description, image, quantity, total) => {
      fetch("/cart",{
@@ -149,20 +112,29 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar fetchCategory = {fetchCategory} fetchingProducts = {fetchingProducts}/>
-      <Routes>
-        <Route path="/" element = {<FoodList products={products} fetchCategory = {fetchCategory} handleAddtoCart={handleAddtoCart}/>}></Route>
-        <Route path="/:name" element = {<DetailsPage handleAddtoCart={handleAddtoCart}/>}></Route>
-        <Route path ="/signin" element = {<Login loginUser={loginUser}/>}></Route>
-        <Route path="/signup" element = {<Register registerUser = {registerUser} />}></Route>
-        <Route path="/contact us" element = {<Contact contactUser = {contactUser}/>}></Route>
-        <Route path="/mycart" element = {<Cart addSales={addSales}/>}></Route>
-        <Route path="/about us" element = {<About />}></Route>
-        <Route path="/checkout" element = {<Checkout addShipping={addShipping}/>}></Route>
-        <Route path="payment" element = {<Payment addPayment={addPayment} />}></Route>
-        <Route path="/menu" element = {<Menu products={products} fetchCategory = {fetchCategory}/>}></Route>
-      </Routes>
-      <Footer fetchCategory = {fetchCategory}/>
+      {userToken && (
+        <>
+        <NavBar fetchCategory = {fetchCategory} fetchingProducts = {fetchingProducts}/>
+        <Routes>
+          <Route path="/" element = {<FoodList products={products} fetchCategory = {fetchCategory} handleAddtoCart={handleAddtoCart}/>}></Route>
+          <Route path="/:name" element = {<DetailsPage handleAddtoCart={handleAddtoCart}/>}></Route>
+          <Route path="/contact us" element = {<Contact contactUser = {contactUser}/>}></Route>
+          <Route path="/mycart" element = {<Cart addSales={addSales}/>}></Route>
+          <Route path="/about us" element = {<About />}></Route>
+          <Route path="/checkout" element = {<Checkout addShipping={addShipping}/>}></Route>
+          <Route path="payment" element = {<Payment addPayment={addPayment} />}></Route>
+          <Route path="/menu" element = {<Menu products={products} fetchCategory = {fetchCategory}/>}></Route>
+        </Routes>
+        <Footer fetchCategory = {fetchCategory}/>
+        </>
+      )}
+      {!userToken && (
+        <Routes>
+          <Route path ="/*" element = {<Login />}></Route>
+          <Route path="/signup" element = {<Register />}></Route>
+        
+        </Routes>)}
+      
     </div>
   );
 }
