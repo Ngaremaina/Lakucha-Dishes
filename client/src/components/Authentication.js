@@ -1,11 +1,11 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
-
 const AuthContext = createContext();
 
 export const Authentication = ({ children }) => {
     const [admin, setAdmin] = useState(null)
     const [userToken, setUserToken] = useState(null)
+    
     
   const loginUser = async (user) => {
     try {
@@ -21,6 +21,7 @@ export const Authentication = ({ children }) => {
         throw new Error('Invalid login credentials');
       }
 
+
       const adminData = await response.json();
       setAdmin(adminData);
       setUserToken(adminData.access_token)
@@ -28,6 +29,7 @@ export const Authentication = ({ children }) => {
       localStorage.setItem('admin', JSON.stringify(adminData));
       localStorage.setItem('userToken', adminData.access_token)
 
+      
 
       return adminData;
     } catch (error) {

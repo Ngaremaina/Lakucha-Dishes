@@ -110,13 +110,27 @@ function App() {
     })
   }
 
+  const registerUser = (user) => {
+    fetch("/register",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(user)
+    })
+   .then(response => {
+    if (response.status === 200) {
+      navigate("/signin")
+    }
+   })
+  }
+
+
   return (
     <div className="App">
       {userToken && (
         <>
         <NavBar fetchCategory = {fetchCategory} fetchingProducts = {fetchingProducts}/>
         <Routes>
-          <Route path="/" element = {<FoodList products={products} fetchCategory = {fetchCategory} handleAddtoCart={handleAddtoCart}/>}></Route>
+          <Route path="/dashboard" element = {<FoodList products={products} fetchCategory = {fetchCategory} handleAddtoCart={handleAddtoCart}/>}></Route>
           <Route path="/:name" element = {<DetailsPage handleAddtoCart={handleAddtoCart}/>}></Route>
           <Route path="/contact us" element = {<Contact contactUser = {contactUser}/>}></Route>
           <Route path="/mycart" element = {<Cart addSales={addSales}/>}></Route>
@@ -124,6 +138,7 @@ function App() {
           <Route path="/checkout" element = {<Checkout addShipping={addShipping}/>}></Route>
           <Route path="payment" element = {<Payment addPayment={addPayment} />}></Route>
           <Route path="/menu" element = {<Menu products={products} fetchCategory = {fetchCategory}/>}></Route>
+
         </Routes>
         <Footer fetchCategory = {fetchCategory}/>
         </>
@@ -131,7 +146,7 @@ function App() {
       {!userToken && (
         <Routes>
           <Route path ="/*" element = {<Login />}></Route>
-          <Route path="/signup" element = {<Register />}></Route>
+          <Route path="/signup" element = {<Register registerUser={registerUser}/>}></Route>
         
         </Routes>)}
       

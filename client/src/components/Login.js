@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./Authentication";
+
 const Login = () => {
     const [user, setUser] = useState({
         email:"",
@@ -8,10 +9,12 @@ const Login = () => {
     })
     
     const {loginUser} = useAuth()
+    const navigate = useNavigate()
 
     const handleSubmit = (event) => {
         event.preventDefault()
         loginUser(user)
+        navigate("/dashboard")
         
     }
     const handleChange = (event) => {

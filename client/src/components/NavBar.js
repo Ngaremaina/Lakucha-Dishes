@@ -13,7 +13,7 @@ const NavBar = ({fetchCategory, fetchProducts}) => {
             <div className="justify-content-center">
                 <ul className="navbar-nav">            
                     <li className="nav-item">
-                    <NavLink className="nav-link text-white" onClick = {() => fetchProducts()} to="/">Home</NavLink>
+                    <NavLink className="nav-link text-white" onClick = {() => fetchProducts()} to="/dashboard">Home</NavLink>
                     </li>
                     <li className="nav-item">
                         <div className="dropdown">
