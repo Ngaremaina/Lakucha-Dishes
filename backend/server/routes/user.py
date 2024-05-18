@@ -52,7 +52,8 @@ def login():
     return make_response(jsonify({
         "access_token":access_token,
         "email":user.email,
-        "username":user.username
+        "username":user.username,
+        "id":user.id
     }), 200)
 
 @users.route('/register', methods=['POST'])

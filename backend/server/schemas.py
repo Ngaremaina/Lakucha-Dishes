@@ -1,39 +1,12 @@
 from marshmallow import Schema, fields
 
-class ClientSchema(Schema):
-    id = fields.Integer()
-    auth_id = fields.Integer()
-    firstname = fields.String()
-    lastname = fields.String()
+class ProfileSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    auth_id = fields.Integer(required=True)
+    firstname = fields.String(required=True)
+    lastname = fields.String(required=True)
     phone = fields.Integer()
-    address = fields.String()
-    city = fields.String()
-    country = fields.String()
-
-class LocationSchema(Schema):
-    id = fields.Integer()
-    client_id = fields.Integer()
-    region = fields.String()
-    address = fields.String()
-    city = fields.String()
-    country = fields.String()
-
-class AdminSchema(Schema):
-    id = fields.Integer()
-    auth_id = fields.Integer()
-    firstname = fields.String()
-    lastname = fields.String()
-    phone = fields.Integer()
-
-class AuthSchema(Schema):
-    id = fields.Integer()
-    username = fields.String()
-    email = fields.String()
-    password = fields.String()
-    role = fields.String()
-    
-    client = fields.Nested(ClientSchema, many=True)
-    admin = fields.Nested(AdminSchema, many=True)
+    image = fields.String()
 
 class ProductSchema(Schema):
     id = fields.Integer()
@@ -69,7 +42,7 @@ class CartSchema(Schema):
     price = fields.Integer()
     description = fields.String()
     image = fields.String()
-    client_id = fields.Integer()
+    auth_id = fields.Integer()
     quantity = fields.Integer()
     total = fields.Integer()
 
@@ -82,8 +55,13 @@ class ShippingSchema(Schema):
     address = fields.String()
     city = fields.String()
 
-class SaleSchema(Schema):
+
+class AuthSchema(Schema):
     id = fields.Integer()
-    quantity = fields.Integer()
-    amount = fields.Integer()
-    name = fields.String()
+    username = fields.String()
+    email = fields.String()
+    password = fields.String()
+    role = fields.String()
+    
+    cart = fields.Nested(CartSchema, many= True)
+    profile = fields.Nested(ProfileSchema, many=True)

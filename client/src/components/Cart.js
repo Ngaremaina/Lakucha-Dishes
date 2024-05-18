@@ -1,9 +1,11 @@
 import React,{useState, useEffect} from "react";
 import CartItem from "./CartItem";
 import { Link } from "react-router-dom";
+import { useAuth } from "./Authentication";
 
 
 const Cart = () => {
+    const {admin} = useAuth()
     const [products, setProduct] = useState([])
     let allPrices = []
     let allitems = []
@@ -12,9 +14,9 @@ const Cart = () => {
         getCart()
     },[])
     const getCart = async () => {      
-          const response = await fetch("/cart")
+          const response = await fetch(`/users/${admin.id}`)
           const data = await response.json()
-          return setProduct(data)
+          return setProduct(data.cart)
     }
       
    

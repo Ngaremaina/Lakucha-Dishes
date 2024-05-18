@@ -9,31 +9,29 @@ class Auth(db.Model):
     password = db.Column(db.String(255))
     role = db.Column(db.String(255))
 
-class Client(db.Model):
-    __tablename__ = "client"
 
-    id = db.Column(db.Integer, primary_key=True)
+class Profile(db.Model):
+    __tablename__ = "profile"
+    id = db.Column(db.Integer, primary_key = True)
     auth_id = db.Column(db.Integer, db.ForeignKey("auth.id"))
     firstname = db.Column(db.String(255))
     lastname = db.Column(db.String(255))
     phone = db.Column(db.Integer)
     image = db.Column(db.String(255))
 
-    auth = db.relationship("Auth", backref = "client")
-    cart = db.relationship("Cart", backref = "client")
-   
-     
-class Admin(db.Model):
-    __tablename__ = "admin"
+    auth = db.relationship("Auth", backref = "profile")
+
+class Category(db.Model):
+    __tablename__ = "category"
 
     id = db.Column(db.Integer, primary_key = True)
-    auth_id = db.Column(db.Integer, db.ForeignKey("auth.id"))
-    firstname = db.Column(db.String(255))
-    lastname = db.Column(db.String(255))
-    phone = db.Column(db.Integer)
-    
-    auth = db.relationship("Auth", backref = "admin")
+    name = db.Column(db.String(255))
 
+class Rating(db.Model):
+    __tablename__ = "rating"
+
+    id = db.Column(db.Integer, primary_key = True)
+    rate = db.Column(db.Float)
 
 class Product(db.Model):
     __tablename__ = "product"
@@ -47,20 +45,10 @@ class Product(db.Model):
     quantity = db.Column(db.Integer)
     description = db.Column(db.String(255))
 
-class Category(db.Model):
-    __tablename__ = "category"
+    category = db.relationship("Category", backref = "product")
+    rating = db.relationship("Rating", backref = "product")
 
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(255))
-    product = db.relationship("Product", backref = "category")
 
-class Rating(db.Model):
-    __tablename__ = "rating"
-
-    id = db.Column(db.Integer, primary_key = True)
-    rate = db.Column(db.Float)
-
-    product = db.relationship("Product", backref = "rating")
 
 class Contact(db.Model):
     __tablename__ = "contact"
@@ -80,24 +68,20 @@ class Cart(db.Model):
     image = db.Column(db.String(255))
     quantity = db.Column(db.Integer)
     total = db.Column(db.Integer)
-    client_id = db.Column(db.Integer, db.ForeignKey("client.id"))
+    auth_id = db.Column(db.Integer, db.ForeignKey("auth.id"))
+
+    auth = db.relationship("Auth", backref = "cart")
 
 
 class Shipping(db.Model):
     __tablename__ = "shipping"
 
     id = db.Column(db.Integer, primary_key = True)
-    client_id = db.Column(db.Integer, db.ForeignKey("client.id"))
+    auth_id = db.Column(db.Integer, db.ForeignKey("auth.id"))
     firstname = db.Column(db.String(255))
     lastname = db.Column(db.String(255))
     region = db.Column(db.String(255))
     address = db.Column(db.String(255))
     city = db.Column(db.String(255))
 
-class Sales(db.Model):
-    __tablename__ = "sales"
-
-    id = db.Column(db.Integer, primary_key = True)
-    quantity = db.Column(db.Integer)
-    amount = db.Column(db.Integer)
-    name = db.Column(db.String(255))
+    shipping = db.relationship("Auth", backref = "shipping")

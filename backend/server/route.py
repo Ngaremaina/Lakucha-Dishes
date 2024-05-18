@@ -6,7 +6,6 @@ from server.routes.rating import ratings
 from server.routes.contact import contact
 from server.routes.cart import cart
 from server.routes.shipping import shippings
-from server.routes.sales import sales
 from flask import request
 import requests
 from requests.auth import HTTPBasicAuth
@@ -18,7 +17,7 @@ app.register_blueprint(category)
 app.register_blueprint(cart)
 app.register_blueprint(contact)
 app.register_blueprint(shippings)
-app.register_blueprint(sales)
+
 
 @app.route("/", methods= ["GET"])
 def display():

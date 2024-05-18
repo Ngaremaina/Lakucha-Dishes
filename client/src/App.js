@@ -17,7 +17,7 @@ import { useAuth } from './components/Authentication';
 
 function App() {
   const [products, setProducts] = useState([])
-  const { userToken } = useAuth();
+  const { userToken, admin } = useAuth();
   const navigate = useNavigate()
   const fetchCategory = async (name) => {
     const response = await fetch(`/category/${name}`)
@@ -45,7 +45,8 @@ function App() {
         description:description,
         image:image,
         quantity:quantity, 
-        total:total
+        total:total,
+        auth_id:admin.id
       })
     })
   }

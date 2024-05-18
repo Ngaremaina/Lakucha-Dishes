@@ -34,7 +34,7 @@ def add_product():
     product_schema = ProductSchema().dump(new_product)
     return make_response(jsonify(product_schema))
 
-@products.route('/users/<int:id>', methods=['PATCH'])
+@products.route('/products/<int:id>', methods=['PATCH'])
 def update_product_details(id):
     product = Product.query.filter_by(id = id).first()
     data = request.get_json()
