@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-const Register = ({registerUser}) => {
+import { Link, useNavigate } from "react-router-dom";
+const Register = () => {
+    const navigate = useNavigate()
     const [user, setUser] = useState({
         username:"",
         email:"",
@@ -12,6 +13,20 @@ const Register = ({registerUser}) => {
         const value = event.target.value
         setUser(prev => {return {...prev, [input]:value}})
     }
+
+    const registerUser = (user) => {
+        fetch("/register",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(user)
+        })
+       .then(response => {
+        if (response.status === 200) {
+          navigate("/signin")
+        }
+       })
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault()
         registerUser(user)

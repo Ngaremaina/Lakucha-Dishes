@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Contact = ({contactUser}) => {
+const Contact = () => {
     const [user, setUser] = useState({
         username:"",
         email:"",
@@ -11,6 +11,19 @@ const Contact = ({contactUser}) => {
         const value = event.target.value
         setUser(prev => {return {...prev, [input]:value}})
     }
+
+    const contactUser = (user) => {
+        fetch("/contact",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(user)
+        })
+        .then(response => {
+          if (response.status === 200){
+            console.log("success")
+          }
+        })
+      }
     const handleSubmit = (event) => {
         event.preventDefault()
         contactUser(user)

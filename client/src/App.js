@@ -19,6 +19,7 @@ function App() {
   const [products, setProducts] = useState([])
   const { userToken, admin } = useAuth();
   const navigate = useNavigate()
+  
   const fetchCategory = async (name) => {
     const response = await fetch(`/category/${name}`)
     const data = await response.json()
@@ -51,18 +52,7 @@ function App() {
     })
   }
 
-  const contactUser = (user) => {
-    fetch("/contact",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(user)
-    })
-    .then(response => {
-      if (response.status === 200){
-        console.log("sucess")
-      }
-    })
-  }
+  
 
   const addShipping = (location) => {
     fetch("/shippings",{
@@ -94,35 +84,6 @@ function App() {
 
   }
 
-  const addSales =(quantity, amount,name) => {
-    fetch("/sales",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        quantity:quantity,
-        amount:amount,
-        name:name
-      })
-    })
-    .then(response => {
-      if (response.status === 200){
-        response.json()
-      }
-    })
-  }
-
-  const registerUser = (user) => {
-    fetch("/register",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(user)
-    })
-   .then(response => {
-    if (response.status === 200) {
-      navigate("/signin")
-    }
-   })
-  }
 
 
   return (
@@ -133,8 +94,8 @@ function App() {
         <Routes>
           <Route path="/dashboard" element = {<FoodList products={products} fetchCategory = {fetchCategory} handleAddtoCart={handleAddtoCart}/>}></Route>
           <Route path="/:name" element = {<DetailsPage handleAddtoCart={handleAddtoCart}/>}></Route>
-          <Route path="/contact us" element = {<Contact contactUser = {contactUser}/>}></Route>
-          <Route path="/mycart" element = {<Cart addSales={addSales}/>}></Route>
+          <Route path="/contact us" element = {<Contact/>}></Route>
+          <Route path="/mycart" element = {<Cart/>}></Route>
           <Route path="/about us" element = {<About />}></Route>
           <Route path="/checkout" element = {<Checkout addShipping={addShipping}/>}></Route>
           <Route path="payment" element = {<Payment addPayment={addPayment} />}></Route>
@@ -147,7 +108,7 @@ function App() {
       {!userToken && (
         <Routes>
           <Route path ="/*" element = {<Login />}></Route>
-          <Route path="/signup" element = {<Register registerUser={registerUser}/>}></Route>
+          <Route path="/signup" element = {<Register/>}></Route>
         
         </Routes>)}
       
