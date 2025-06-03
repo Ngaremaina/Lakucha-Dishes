@@ -1,4 +1,4 @@
-from server import app, render_template
+from server import app, render_template, os
 from server.routes.user import users
 from server.routes.product import products
 from server.routes.category import category
@@ -35,7 +35,7 @@ def init_stk():
     data = {
     
     "BusinessShortCode": 174379,
-    "Password": "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjMwOTI5MTUyNjAz",
+    "Password": os.getenv("Password"),
     "Timestamp": "20230929152603",
     "TransactionType": "CustomerPayBillOnline",
     "Amount": amount,
@@ -52,8 +52,8 @@ def init_stk():
     return res.json()
 
 def get_access_token():
-    consumer_key = "4IcwUdC0enLhQ5Muc6CBJA6zumb7tqbX"
-    consumer_secret = "kegPo5b7DigJUEDZ"
+    consumer_key = os.getenv("CONSUMER_KEY")
+    consumer_secret = os.getenv("CONSUMER_SECRET")
     endpoint = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
 
     r = requests.get(endpoint, auth=HTTPBasicAuth(consumer_key, consumer_secret))

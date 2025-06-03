@@ -9,10 +9,7 @@ import os
 
 load_dotenv()
 
-app = Flask(__name__,
-            static_url_path='',
-            static_folder='../../client/build',
-            template_folder='../../client/build')
+app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -24,4 +21,4 @@ migrate = Migrate(app, db)
 ma.init_app(app)
 
 jwt = JWTManager(app)
-CORS(app)
+CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
