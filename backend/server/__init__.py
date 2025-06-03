@@ -21,4 +21,4 @@ migrate = Migrate(app, db)
 ma.init_app(app)
 
 jwt = JWTManager(app)
-CORS(app, supports_credentials=True, origins=["http://localhost:5173", "https://lakucha-dishes.vercel.app/"])
+CORS(app, supports_credentials=True, origins=["http://localhost:5173", "https://lakucha-dishes.vercel.app"])
