@@ -17,7 +17,7 @@ export default function InputField({ id, name, onChange, placeholder, value, typ
                 type={type}
                 name={name}
                 id={id}
-                className="bg-gray-700 text-black border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-8"
+                className="bg-gray-300 text-black border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-4"
                 placeholder={placeholder}
                 onChange={onChange}
                 {...rest}

@@ -61,9 +61,9 @@ const Login = () => {
                 />
                 <>
                   <p>
-                    Don't have an account?
-                    <Link to="/signup" className="text-decoration-underline text-info">
-                      Click here to Register
+                    Don't have an account? <nbsp></nbsp>
+                    <Link to="/signup" className="text-decoration-underline text-blue-700">
+                       Click here to Register
                     </Link>
                   </p>
                 </>
@@ -72,12 +72,12 @@ const Login = () => {
             </div>
 
             {/* Image - RIGHT */}
-            <div className="md:h-full h-64 bg-[#000842] rounded-xl lg:p-12 p-4 flex items-center justify-center">
-              <img
-                src="https://readymadeui.com/signin-image.webp"
-                className="w-full h-full object-contain"
+           <div className="h-full h-full rounded-xl flex items-center justify-center">
+                <img
+                src="https://cdn.pixabay.com/photo/2024/09/12/06/02/ai-generated-9041388_640.jpg"
+                className="w-full h-full object-contain rounded-xl"
                 alt="login"
-              />
+                />
             </div>
           </div>
         </div>
