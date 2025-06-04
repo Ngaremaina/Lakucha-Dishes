@@ -61,7 +61,7 @@ const Login = () => {
                 />
                 <>
                   <p>
-                    Don't have an account? <nbsp></nbsp>
+                    Don't have an account? {" "}
                     <Link to="/signup" className="text-decoration-underline text-blue-700">
                        Click here to Register
                     </Link>
