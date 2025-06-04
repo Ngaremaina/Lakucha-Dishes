@@ -14,7 +14,7 @@ import Login from "../pages/Login"
 import Register from "../pages/Register"
 import { useGlobal } from "../context/GlobalContext";
 import Loader from "../components/loader/Loader"
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 
 export default function AppRoutes(){
     const { userToken, loading: authLoading  } = useAuth();
