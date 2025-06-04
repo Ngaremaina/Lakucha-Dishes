@@ -11,7 +11,7 @@ Flask-JWT-Extended==4.6.0
 flask-marshmallow==0.15.0
 Flask-Migrate==4.0.4
 Flask-SQLAlchemy==3.0.5
-gunicorn==21.2.0
+gunicorn==23.0.0
 honcho==1.1.0
 idna==3.7
 itsdangerous==2.1.2
