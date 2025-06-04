@@ -18,11 +18,6 @@ app.register_blueprint(cart)
 app.register_blueprint(contact)
 app.register_blueprint(shippings)
 
-
-@app.route("/", methods= ["GET"])
-def display():
-    return render_template("index.html")
-
 @app.route('/payments', methods=['POST'])
 def init_stk():
     amount = request.get_json()["amount"]
@@ -33,18 +28,17 @@ def init_stk():
     headers = { "Authorization": "Bearer %s" % access_token }
 
     data = {
-    
-    "BusinessShortCode": 174379,
-    "Password": os.getenv("Password"),
-    "Timestamp": "20230929152603",
-    "TransactionType": "CustomerPayBillOnline",
-    "Amount": amount,
-    "PartyA": phone,
-    "PartyB": 174379,
-    "PhoneNumber": phone,
-    "CallBackURL": "https://mydomain.com/path",
-    "AccountReference": "Lakucha Dishes",
-    "TransactionDesc": "Payment of Dishes" 
+        "BusinessShortCode": 174379,
+        "Password": os.getenv("Password"),
+        "Timestamp": "20230929152603",
+        "TransactionType": "CustomerPayBillOnline",
+        "Amount": amount,
+        "PartyA": phone,
+        "PartyB": 174379,
+        "PhoneNumber": phone,
+        "CallBackURL": "https://mydomain.com/path",
+        "AccountReference": "Lakucha Dishes",
+        "TransactionDesc": "Payment of Dishes" 
   }
   
 
