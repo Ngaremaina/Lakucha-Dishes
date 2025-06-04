@@ -30,7 +30,7 @@ const FoodItem = ({image, name, price, description}) => {
                 </p>
                 </div>
                 <p className="text-slate-600 leading-normal font-light">
-                    {description.length > 45 ? `${description.substring(0, 45)}...` : description}
+                    {description.length > 35 ? `${description.substring(0, 35)}...` : description}
                 </p>
                 <AddToCartButton
                     name={name}
