@@ -14,6 +14,7 @@ import Login from "../pages/Login"
 import Register from "../pages/Register"
 import { useGlobal } from "../context/GlobalContext";
 import Loader from "../components/loader/Loader"
+import { Analytics } from "@vercel/analytics/next"
 
 export default function AppRoutes(){
     const { userToken, loading: authLoading  } = useAuth();
@@ -26,6 +27,7 @@ export default function AppRoutes(){
         {userToken && <NavBar fetchCategory={fetchCategory} fetchingProducts={fetchProducts} />}
       
       <main className="flex-grow">
+        <Analytics/>
         <Routes>
             {/* Protected Routes */}
             {userToken ? (
