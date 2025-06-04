@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://lakucha-dishes.onrender.com', // Change this to your backend URL
+  baseURL: 'https://lakucha-dishes-0zbz.onrender.com', // Change this to your backend URL
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',

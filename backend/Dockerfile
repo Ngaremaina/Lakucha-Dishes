@@ -1,16 +1,19 @@
 # Use official Python image
-FROM python:3.13-alpine
-
+FROM python:3.11-alpine
+    
 # Set working directory
 WORKDIR /app
 
-# Copy requirements and install
+# Install dependencies
 COPY requirements.txt .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app code
+# Copy project files
 COPY . .
 
-# Expose port and run app
-EXPOSE 5000
-CMD ["python", "app.py"]
+# Expose the port your app runs on (e.g. 8000 for Django)
+EXPOSE 8000
+
+# Start the app (modify this based on your framework)
+CMD ["gunicorn", "main:app", "--bind", "0.0.0.0:8000"]
