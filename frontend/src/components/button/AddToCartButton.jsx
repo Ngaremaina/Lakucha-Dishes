@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { handleAddtoCart } from '../../services/Cart';
+import { useGlobal } from '../../context/GlobalContext';
 
 const AddToCartButton = ({ name, price, description, image, quantity, total, adminId }) => {
   const [loading, setLoading] = useState(false);
+  const { fetchCart } = useGlobal();
 
   const handleClick = async () => {
     setLoading(true);
     try {
-      await handleAddtoCart(name, price, description, image, quantity, total, adminId);
+      await handleAddtoCart(name, price, description, image, quantity, total, adminId, fetchCart);
     } catch (error) {
       console.error("Add to cart failed", error);
     } finally {
@@ -17,15 +19,15 @@ const AddToCartButton = ({ name, price, description, image, quantity, total, adm
 
   return (
     <button
-      className={`flex items-center justify-center gap-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${
+      className={`flex justify-center items-center rounded-md w-full mt-6 bg-cyan-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg cursor-pointer focus:bg-cyan-700 focus:shadow-none active:bg-cyan-700 hover:bg-cyan-700 active:shadow-none ${
         loading ? 'opacity-70 cursor-not-allowed' : ''
       }`}
       onClick={handleClick}
       disabled={loading}
     >
-      {loading && (
+      {loading ? (
         <svg
-          className="animate-spin h-4 w-4 text-white"
+          className="animate-spin h-5 w-5 text-white"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -37,8 +39,9 @@ const AddToCartButton = ({ name, price, description, image, quantity, total, adm
             d="M4 12a8 8 0 018-8v8z"
           />
         </svg>
+      ) : (
+        'Add to cart'
       )}
-      {loading ? 'Adding...' : 'Add to cart'}
     </button>
   );
 };

@@ -58,7 +58,7 @@ const Cart = () => {
           </div>
           <Link
             to="/checkout"
-            className="w-full block bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700 transition"
+            className="w-full block bg-blue-600 text-white text-center p-3 rounded hover:bg-blue-700 transition"
           >
             Checkout
           </Link>

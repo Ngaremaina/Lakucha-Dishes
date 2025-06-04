@@ -1,107 +1,153 @@
 import React, { useState } from "react";
+import { addShipping } from "../services/Products";
+import { useNavigate } from "react-router-dom";
+import SubmitButton from "../components/button/SubmitButton";
 
-const Checkout = ({addShipping}) => {
-    const [shipping, setShipping] = useState({
-      firstname:"",
-      lastname:"",
-      address:"",
-      city:"",
-      region:"",
-    })
-    const handleSubmit = (event) => {
-      event.preventDefault()
-      // console.log(shipping)
-      addShipping(shipping)
-    }
-    const handleChange = (event) => {
-      const input = event.target.id
-      const value = event.target.value
+const Checkout = () => {
+  const [shipping, setShipping] = useState({
+    firstname: "",
+    lastname: "",
+    address: "",
+    city: "",
+    region: "",
+  });
 
-      setShipping(prev => {return {...prev, [input]:value}})
+  const navigate = useNavigate()
 
-    }
-    return(
-        <div className="card">
-          <div className="row d-flex justify-content-center">
-          <div className="col-md-7 col-lg-8">
-              <div className="card mb-4">
-                <div className="card-header py-3">
-                  <h4 className="mb-0">Shipping Address</h4>
-                </div>
-                <div className="card-body">
-                  <form className="needs-validation" noValidate onSubmit={handleSubmit}>
-                    <div className="row g-3">
-                    <div className="col-sm-6 my-1">
-                        <label className="form-label">
-                          First name
-                        </label>
-                        <input type="text" className="form-control" id="firstname" placeholder="John" value={shipping.firstname} required onChange={handleChange}/>
-                        <div className="invalid-feedback">
-                          Valid first name is required.
-                        </div>
-                      </div>
-                      <div className="col-sm-6 my-1">
-                        <label className="form-label">
-                          Last name
-                        </label>
-                        <input type="text" className="form-control" id="lastname" placeholder="Doe" value={shipping.lastname} required onChange={handleChange}/>
-                        <div className="invalid-feedback">
-                          Valid last name is required.
-                        </div>
-                      </div>
-                      <div className="col-12 my-1">
-                        <label className="form-label">
-                          Address
-                        </label>
-                        <input type="text" className="form-control" id="address" placeholder="1234 Main St" value={shipping.address} required onChange={handleChange}/>
-                        <div className="invalid-feedback">
-                          Please enter your shipping address.
-                        </div>
-                      </div>
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setLoading(true);
+      try {
+        const response = await addShipping(shipping);
+        if (response){
+            navigate('/payment')
+          }
+      } finally {
+        setLoading(false);
+      }
+    };
 
-                      <div className="col-sm-6 y-1">
-                        <label className="form-label">
-                          Region
-                        </label>
-                        <br />
-                        <select className="form-select" id="region" value={shipping.region} required onChange={handleChange}>
-                          <option value="">Choose...</option>
-                          <option>Nairobi</option>
-                        </select>
-                        <div className="invalid-feedback">
-                          Please select a valid region.
-                        </div>
-                      </div>
 
-                      <div className="col-sm-6 my-1">
-                        <label className="form-label">
-                          City
-                        </label>
-                        <br />
-                        <select className="form-select" id="city" value={shipping.city} required onChange={handleChange}>
-                          <option value="">Choose...</option>
-                          <option>Utawala</option>
-                        </select>
-                        <div className="invalid-feedback">
-                          Please provide a valid city.
-                        </div>
-                      </div>
-                    </div>
-                    <hr className="my-4" />
 
-                    <button className="btn btn-primary" type="submit">
-                      Save
-                    </button>
-                  </form>
-                </div>
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setShipping((prev) => ({ ...prev, [id]: value }));
+  };
+
+  return (
+    <div className="flex justify-center p-4 bg-gray-100 min-h-screen">
+      <div className="w-full max-w-2xl bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="bg-gray-800 text-white px-6 py-4">
+          <h4 className="text-xl font-semibold">Shipping Address</h4>
+        </div>
+        <div className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="firstname" className="block text-sm font-medium text-gray-700 mb-1">
+                  First name
+                </label>
+                <input
+                  type="text"
+                  id="firstname"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="John"
+                  value={shipping.firstname}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="lastname" className="block text-sm font-medium text-gray-700 mb-1">
+                  Last name
+                </label>
+                <input
+                  type="text"
+                  id="lastname"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Doe"
+                  value={shipping.lastname}
+                  onChange={handleChange}
+                  required
+                />
               </div>
             </div>
-          
-          </div>
+
+            <div>
+              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                Address
+              </label>
+              <input
+                type="text"
+                id="address"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="1234 Main St"
+                value={shipping.address}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="region" className="block text-sm font-medium text-gray-700 mb-1">
+                  Region
+                </label>
+                <select
+                  id="region"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={shipping.region}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Choose...</option>
+                  <option>Nairobi</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                  City
+                </label>
+                <select
+                  id="city"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={shipping.city}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Choose...</option>
+                  <option>Utawala</option>
+                  <option>Westlands</option>
+                  <option>Karen</option>
+                  <option>Lang'ata</option>
+                  <option>South B</option>
+                  <option>South C</option>
+                  <option>Eastleigh</option>
+                  <option>Embakasi</option>
+                  <option>Donholm</option>
+                  <option>Buruburu</option>
+                  <option>Kasarani</option>
+                  <option>Roysambu</option>
+                  <option>Thika</option>
+                  <option>Ruiru</option>
+                  <option>Syokimau</option>
+                  <option>Kitengela</option>
+                  <option>Athi River</option>
+                  <option>Ngong</option>
+                  <option>Ruaka</option>
+                </select>
+              </div>
+
+            </div>
+
+            <hr className="my-4" />
+
+            <SubmitButton text="Save" loading = {loading}/>
+          </form>
         </div>
-        
-    )
+      </div>
+    </div>
+  );
+};
 
-}
-
-export default Checkout
+export default Checkout;

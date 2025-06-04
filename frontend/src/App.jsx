@@ -11,7 +11,7 @@ function App() {
         <GlobalProvider>
           <AppRoutes/>
         </GlobalProvider>
-      </Authentication>'
+      </Authentication>
     </>
   );
 }

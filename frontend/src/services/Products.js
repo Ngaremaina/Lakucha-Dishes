@@ -23,8 +23,16 @@ export const getFoods = async () => {
     }
 }
 
-
-
+export const getEachFood = async (name) => {
+    try{
+        const response = await axiosInstance.get(`/products/${name}`)
+        return response.data
+    }
+    catch (error) {
+        console.error('Fetch food error:', error.response?.data || error.message);
+        throw error;
+    }
+}
 
 export const addPayment = async (phone, total) => {
     let number = "254" + phone
@@ -34,9 +42,8 @@ export const addPayment = async (phone, total) => {
         amount:total
     }
     try{
-        const response = await axiosInstance.post('/payments', {
-            payload
-        })
+        const response = await axiosInstance.post('/payments', 
+            payload)
         return await response.data
     }
     catch (error) {
@@ -48,9 +55,7 @@ export const addPayment = async (phone, total) => {
 
 export const addShipping = async (location) => {
     try{
-        const response = await axiosInstance.post('/shippings',{
-            location
-        })
+        const response = await axiosInstance.post('/shippings', location)
         return await response.data
     }
     catch(error){

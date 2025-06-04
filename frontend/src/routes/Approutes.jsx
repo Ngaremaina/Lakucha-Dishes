@@ -22,9 +22,10 @@ export default function AppRoutes(){
    if (authLoading || dataLoading) return <Loader/>;
 
     return(
-        <>
+        <div className="min-h-screen flex flex-col">
         {userToken && <NavBar fetchCategory={fetchCategory} fetchingProducts={fetchProducts} />}
       
+      <main className="flex-grow">
         <Routes>
             {/* Protected Routes */}
             {userToken ? (
@@ -48,8 +49,9 @@ export default function AppRoutes(){
               </>
             )}
         </Routes>
+        </main>
        
       {userToken && <Footer fetchCategory = {fetchCategory}/>}
-      </>
+      </div>
     )
 }

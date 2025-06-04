@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Footer = ({ fetchCategory }) => {
   return (
-    <footer className="bg-gray-900 text-white py-8 px-4 md:px-12 mt-6 border-t border-gray-700">
+    <footer className="bg-gray-900 text-white py-12 px-4 md:px-12 border-t border-gray-700 mt-auto">
       <div className="max-w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
 
         {/* Brand */}

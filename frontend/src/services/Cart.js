@@ -11,7 +11,7 @@ export const getCartItems = async (adminId) => {
     }
 }
 
-export const updateCart = async (id, name, price, description, image, total, quantity, adminId) => {
+export const updateCart = async (id, name, price, description, image, total, quantity, adminId, fetchCart) => {
     try{
         let product = {
             name:name,
@@ -24,7 +24,7 @@ export const updateCart = async (id, name, price, description, image, total, qua
             
         }
         const response = await axiosInstance.patch(`/cart/${id}`, product)
-
+        await fetchCart();
         return await response.data
     }
         
@@ -35,9 +35,10 @@ export const updateCart = async (id, name, price, description, image, total, qua
     }
 }
 
-export const handleDelete = async (id) => {
+export const handleDelete = async (id, fetchCart) => {
     try{
         const response = await axiosInstance.delete(`/cart/${id}`)
+        await fetchCart();
         return response.data
     }
     catch (error) {
@@ -47,7 +48,7 @@ export const handleDelete = async (id) => {
     
 }
     
-export const handleAddtoCart = async (name, price, description, image, quantity, total, adminId) => {
+export const handleAddtoCart = async (name, price, description, image, quantity, total, adminId, fetchCart) => {
     const payload = {
         name:name,
         price:price,
@@ -59,6 +60,7 @@ export const handleAddtoCart = async (name, price, description, image, quantity,
       }
     try{
         const response = await axiosInstance.post('/cart', payload)
+        await fetchCart();
         return await response.data
     }
     catch (error) {

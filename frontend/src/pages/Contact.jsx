@@ -1,62 +1,88 @@
 import React, { useState } from "react";
+import { contactUser } from "../services/User";
+import SubmitButton from "../components/button/SubmitButton";
 
 const Contact = () => {
-    const [user, setUser] = useState({
-        username:"",
-        email:"",
-        message:""
-    })
-    const handleChange = (event) => {
-        const input = event.target.name
-        const value = event.target.value
-        setUser(prev => {return {...prev, [input]:value}})
-    }
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false)
 
-    const contactUser = (user) => {
-        fetch("/contact",{
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify(user)
-        })
-        .then(response => {
-          if (response.status === 200){
-            console.log("success")
-          }
-        })
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setLoading(true);
+      try {
+        await contactUser(user);
+      } finally {
+        setLoading(false);
       }
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        contactUser(user)
-    }
-    return(
-        <div className="container my-3 py-3">
-            <h1 className="text-center">Contact Us</h1>
-            <hr />
-                <div className="row my-4 h-100">
-                    <div className="col-md-4 col-lg-4 col-sm-8 mx-auto">
-                        <form onSubmit={handleSubmit}>
-                            <div className="form my-3">
-                                <label>Username</label>
-                                <input type="text" className="form-control" id="Name" placeholder="John Doe" onChange={handleChange} name="username" value={user.username}/>
-                            </div>
-                            <div className="form my-3">
-                                <label>Email address</label>
-                                <input type="email" className="form-control" id="Email" placeholder="johndoe@example.com" onChange={handleChange} name="email" value={user.email}/>
-                            </div>
-                            <div className="form my-3">   
-                                <label>Message</label>
-                                <textarea type="text" className="form-control" id="Message" placeholder="Type your message" onChange={handleChange} name="message" value={user.message} rows={3}></textarea>
-                            </div>
-                            
-                            <div className="text-center">
-                                <button className="my-2 mx-auto btn btn-dark" type="submit">Submit</button>
-                            </div>
-                           
-                        </form>
-                    </div>
-                </div>
-            </div>
-    )
-}
+    };
 
-export default Contact
+  return (
+    <div className="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8">
+      <h1 className="text-2xl font-semibold text-center mb-4">Contact Us</h1>
+      <hr className="mb-6 border-gray-300" />
+
+      <form onSubmit={handleSubmit} className="space-y-5 max-w-md mx-auto">
+        <div>
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+            Username
+          </label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="John Doe"
+            value={user.username}
+            onChange={handleChange}
+            required
+            className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            Email address
+          </label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="johndoe@example.com"
+            value={user.email}
+            onChange={handleChange}
+            required
+            className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+            Message
+          </label>
+          <textarea
+            name="message"
+            id="message"
+            placeholder="Type your message"
+            value={user.message}
+            onChange={handleChange}
+            rows={4}
+            required
+            className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <SubmitButton text="Submit" loading = {loading}/>
+      </form>
+    </div>
+  );
+};
+
+export default Contact;

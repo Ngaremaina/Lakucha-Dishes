@@ -12,8 +12,6 @@ export const GlobalProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
   const [cartItems, setCartItems] = useState([])
 
-  console.log(admin)
-
   const fetchCategory = async (name) => {
     try {
       const response = await getCategories(name);
@@ -36,7 +34,7 @@ export const GlobalProvider = ({ children }) => {
   const fetchProducts = async () => {
     try {
       const response = await getFoods();
-      console.log("Fetched foods:", response);
+
       setProducts(response);
       return response;
     } catch (error) {
@@ -72,6 +70,7 @@ export const GlobalProvider = ({ children }) => {
         loading,
         fetchCategory,
         fetchProducts,
+        fetchCart,
         products,
         categories,
         cartItems

@@ -1,105 +1,81 @@
 import React, { useEffect, useState } from "react";
+import { addPayment } from "../services/Products";
+import { useGlobal } from "../context/GlobalContext";
+import SubmitButton from "../components/button/SubmitButton"
 
-const Payment = ({addPayment}) => {
-    const [products, setProducts] = useState([])
-    useEffect(() => {
-        const getTotals = async () => {
-            const response = await fetch("/cart")
-            const data = await response.json()
-            return setProducts(data)
-        }
-        getTotals()
+const Payment = () => {
+  const [phone, setPhone] = useState("");
+  const { cartItems } = useGlobal()
+  const [loading, setLoading] = useState(false);
 
-    },[])
-    let allPrices = []
-    let allitems = []
+  const allPrices = cartItems?.map(item => item.total);
+  const allItems = cartItems?.map(item => item.quantity);
 
-    products?.map(item => {
-        allPrices.push(item.total)
-        allitems.push(item.quantity)
-        return null
-    })
-    let grandPrice = 0
-    let totalitems = 0
-    const grandTotal = allPrices.reduce((accumulator, currentValue) => accumulator + currentValue, grandPrice)
-    const totalPrice =  grandTotal + 250
-    const granditems = allitems.reduce((accumulator, currentValue) => accumulator + currentValue, totalitems)
+  const totalItems = allItems.reduce((acc, curr) => acc + curr, 0);
+  const subtotal = allPrices.reduce((acc, curr) => acc + curr, 0);
+  const shipping = 250;
+  const totalPrice = subtotal + shipping;
 
-    const [phone, setPhone] = useState("")
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        addPayment(phone, totalPrice)
-      }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await addPayment(phone, totalPrice);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return(
-        <div className="card">
-          <div className="row d-flex justify-content-center">
-          <div className="col-md-7 col-lg-8">
-              <div className="card mb-4">
-                <div className="card-header py-3">
-                  <h4 className="mb-0">MPESA Payment</h4>
-                </div>
-                <div className="row d-flex justify-content-center">
-                    <div className="col-md-5">
-                        <h4 className="text-center">
-                            Order Summary
-                        </h4>
-                        <div className="card-body">
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                <th scope="col">Items</th>
-                                <th scope="col">Shipping Fees</th>
-                                <th scope="col">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                <td>{granditems}</td>
-                                <td>250</td>
-                                <td>{totalPrice}</td>
-                                </tr>                               
-                            </tbody>
-                        </table>
-                        </div>
-                    </div>
-                </div>
-                <div className="card-body">
-                  <form className="needs-validation" noValidate onSubmit={handleSubmit}>
-                    <div className="row g-3">
-                    <div className="col-sm-2 my-1">
-                        <label className="form-label">
-                          Prefix
-                        </label>
-                       <p className="mt-2">+254</p>
-                    </div>
+  return (
+    <div className="max-w-3xl mx-auto p-4">
+      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="bg-gray-100 px-6 py-4">
+          <h4 className="text-xl font-semibold text-gray-800">MPESA Payment</h4>
+        </div>
 
-                    <div className="col-sm-6 my-1">
-                        <label className="form-label">
-                          Phone Number
-                        </label>
-                        <input type="number" className="form-control" id="phone" placeholder="712345678" value={phone} required onChange={e => setPhone(e.target.value)}/>
-                        <div className="invalid-feedback">
-                          Valid number is required.
-                        </div>
-                    </div>                    
-                      
-                    </div>
-                    <hr className="my-4" />
+        <div className="px-6 py-4">
+          <h4 className="text-center text-lg font-medium mb-4">Order Summary</h4>
+          <table className="w-full text-left border-collapse mb-6">
+            <thead>
+              <tr>
+                <th className="py-2">Items</th>
+                <th className="py-2">Shipping</th>
+                <th className="py-2">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t">
+                <td className="py-2">{totalItems}</td>
+                <td className="py-2">{shipping}</td>
+                <td className="py-2 font-semibold">{totalPrice}</td>
+              </tr>
+            </tbody>
+          </table>
 
-                    <button className="btn btn-primary" type="submit">
-                      Pay
-                    </button>
-                  </form>
-                </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex items-end gap-4">
+              <div className="w-2/3">
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number
+                </label>
+                <input
+                  type="number"
+                  id="phone"
+                  placeholder="712345678"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
             </div>
-          
-          </div>
+
+            <SubmitButton text="Pay" loading = {loading}/>
+          </form>
         </div>
-        
-    )
+      </div>
+    </div>
+  );
+};
 
-}
-
-export default Payment
+export default Payment;

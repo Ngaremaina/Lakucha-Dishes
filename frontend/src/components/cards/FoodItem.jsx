@@ -9,50 +9,39 @@ const FoodItem = ({image, name, price, description}) => {
     const { admin } = useContext(AuthContext)
 
     return(
-        <div className="w-full mb-2 max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-
-            <Link  to={`/${name}`} className="cursor-pointer">
-            <img 
-                className="p-2 rounded-t-lg h-100 w-full" 
-                src={image} 
-                alt={name} />
-            </Link>
-
-        <div className="px-5 pb-5">
-            <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
-            <div className="flex items-center mt-2.5 mb-5">
-            <div className="flex items-center space-x-1 rtl:space-x-reverse">
-                <svg className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                </svg>
-                <svg className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                </svg>
-                <svg className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                </svg>
-                <svg className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                </svg>
-                <svg className="w-4 h-4 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                </svg>
+        <div className="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-fit">
+            <div className="relative p-2.5 h-96 overflow-hidden rounded-xl bg-clip-border">
+                <Link  to={`/${name}`}>
+                    <img
+                        src={image}
+                        alt={name}
+                        className="h-full w-full object-cover rounded-md"
+                    />
+                </Link>
+                
             </div>
-            <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-sm dark:bg-blue-200 dark:text-blue-800 ms-3">5.0</span>
+            <div className="p-4">
+                <div className="mb-2 flex items-center justify-between">
+                <p className="text-slate-800 text-xl font-semibold">
+                    {name}
+                </p>
+                <p className="text-cyan-600 text-xl font-semibold">
+                    Kshs. {price}
+                </p>
+                </div>
+                <p className="text-slate-600 leading-normal font-light">
+                    {description.length > 45 ? `${description.substring(0, 45)}...` : description}
+                </p>
+                <AddToCartButton
+                    name={name}
+                    price={price}
+                    description={description}
+                    image={image}
+                    quantity={1}
+                    total={total}
+                    adminId={admin.id}
+                    />
             </div>
-            <div className="flex items-center justify-between">
-            <span className="text-3xl font-bold text-gray-900 dark:text-white">Kshs. {price}</span>
-            <AddToCartButton
-                name={name}
-                price={price}
-                description={description}
-                image={image}
-                quantity={1}
-                total={total}
-                adminId={admin.id}
-                />
-            </div>
-        </div>
         </div>
     )
 }
