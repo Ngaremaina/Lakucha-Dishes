@@ -1,8 +1,5 @@
 # Use official Python image
-FROM python:3.13-alpine
-
-RUN apk update && \
-    apk add --no-cache g++ gcc musl-dev
+FROM python:3.11-alpine
     
 # Set working directory
 WORKDIR /app
