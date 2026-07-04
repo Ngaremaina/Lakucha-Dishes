@@ -25,7 +25,7 @@ app:
     access-token-ttl-minutes: ${ACCESS_TOKEN_TTL_MINUTES:15}
     refresh-token-ttl-days: ${REFRESH_TOKEN_TTL_DAYS:30}
   cors:
-    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173, https://lakucha-dishes.vercel.app}
   rate-limit:
     auth-capacity: ${AUTH_RATE_LIMIT_CAPACITY:10}
     auth-period-seconds: ${AUTH_RATE_LIMIT_PERIOD_SECONDS:60}
