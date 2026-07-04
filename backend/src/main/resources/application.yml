@@ -40,7 +40,7 @@ app:
     consumer-secret: ${DARAJA_CONSUMER_SECRET}
     shortcode: ${DARAJA_SHORTCODE:174379}
     passkey: ${DARAJA_PASSKEY}
-    callback-url: ${DARAJA_CALLBACK_URL:https://example.com/payments/callback}
+    callback-url: ${DARAJA_CALLBACK_URL:https://lakucha-dishes-0zbz.onrender.com/payments/callback}
 
 management:
   endpoints:

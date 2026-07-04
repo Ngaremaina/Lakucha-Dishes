@@ -35,7 +35,7 @@ jobs:
     - name: Run tests (unit + Testcontainers integration)
       working-directory: backend
       env:
-        JWT_SECRET_KEY: ci-test-secret-key
+        JWT_SECRET_KEY: ci-test-secret-key-ci-test-secret-key-32b
         DARAJA_CONSUMER_KEY: ci-test-consumer-key
         DARAJA_CONSUMER_SECRET: ci-test-consumer-secret
       run: mvn -B verify
