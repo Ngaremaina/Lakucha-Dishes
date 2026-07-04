@@ -1,1 +1,48 @@
 @import "tailwindcss";
+
+@theme {
+  /* Brand: warm amber/orange, food-forward */
+  --color-brand-50: #fff7ed;
+  --color-brand-100: #ffedd5;
+  --color-brand-200: #fed7aa;
+  --color-brand-300: #fdba74;
+  --color-brand-400: #fb923c;
+  --color-brand-500: #f97316;
+  --color-brand-600: #ea580c;
+  --color-brand-700: #c2410c;
+  --color-brand-800: #9a3412;
+  --color-brand-900: #7c2d12;
+
+  /* Neutral surface/text scale */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f9fafb;
+  --color-ink: #1c1917;
+  --color-ink-muted: #57534e;
+  --color-border: #e7e5e4;
+
+  /* Semantic status colors (order/payment states) */
+  --color-status-pending: #a16207;
+  --color-status-paid: #15803d;
+  --color-status-preparing: #1d4ed8;
+  --color-status-transit: #6d28d9;
+  --color-status-delivered: #15803d;
+  --color-status-cancelled: #b91c1c;
+
+  --radius-card: 0.75rem;
+  --radius-control: 0.5rem;
+
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-elevated: 0 4px 12px -2px rgb(0 0 0 / 0.12), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+}
+
+/* @theme compiles the tokens above into real :root custom properties, so
+   dark-mode overrides just redeclare them here rather than re-entering @theme. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface: #1c1917;
+    --color-surface-muted: #292524;
+    --color-ink: #fafaf9;
+    --color-ink-muted: #a8a29e;
+    --color-border: #44403c;
+  }
+}

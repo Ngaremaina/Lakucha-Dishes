@@ -1,0 +1,7 @@
+# Used only by the Playwright smoke test (frontend/e2e), which runs the real Spring Boot
+# app against a real Postgres but swaps DarajaClientImpl for FakeDarajaClient so the
+# checkout -> STK push step never calls Safaricom's sandbox.
+app:
+  cookie:
+    secure: false
+    same-site: Lax

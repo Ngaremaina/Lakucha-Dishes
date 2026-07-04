@@ -1,81 +1,123 @@
 # Lakucha Dishes
 
-**Project Description:** 
+Lakucha Dishes is a food-ordering web app: browse a menu, place orders, and pay
+with M-Pesa. The backend is a Spring Boot API on Postgres; the frontend is a
+React + Tailwind single-page app.
 
-Lakucha Dishes is a web application that allows users to browse a menu, place orders, and make payments for their favorite dishes from a restaurant. It's a convenient way for customers to enjoy delicious meals from the comfort of their homes or offices.
+## Tech stack
 
-## Table of Contents
+- **Backend:** Java 21, Spring Boot 3, Spring Security (JWT + rotating refresh
+  token), Spring Data JPA, Flyway, PostgreSQL, springdoc-openapi, Bucket4j
+  (rate limiting), JUnit 5 + Testcontainers
+- **Frontend:** React 19, Vite, Tailwind CSS, TanStack Query, Zustand,
+  React Hook Form + Zod, Radix UI primitives
+- **Payments:** Safaricom M-Pesa Daraja STK Push
+- **Infra:** Docker / docker-compose, GitHub Actions CI, deploys to Render;
+  Postgres via Neon in production
 
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Features](#features)
-- [Usage](#usage)
-- [License](#license)
-
-## Getting Started
-
-Get started with Lakucha Dishes by following these steps:
+## Getting started
 
 ### Prerequisites
 
-Before you begin, make sure you have the following prerequisites installed:
+- **Docker + Docker Compose** — easiest way to run the full stack
+- Or, to run services individually:
+  - **Java 21** and **Maven** for the backend
+  - **Node.js 22+** for the frontend
+  - A local **PostgreSQL** instance
 
-- **Node.js:** You need Node.js to run the application. You can download it from [nodejs.org](https://nodejs.org/).
+### Option A: Docker Compose (full stack)
 
-### Installation
+```bash
+docker compose up --build
+```
 
-1. Clone the repository:
+This starts Postgres, the Spring Boot API (`http://localhost:8080`), and the
+built frontend served by nginx (`http://localhost:80`).
 
-   ```bash
-   git clone https://github.com/Ngaremaina/Lakucha-Dishes
-   ```
+### Option B: run services individually
 
-2. Navigate to the project directory:
+**Backend** (`backend/`):
 
-   ```bash
-   cd client
-   ```
+```bash
+cd backend
+mvn spring-boot:run
+```
 
-3. Install the project dependencies:
+By default it expects Postgres at `jdbc:postgresql://localhost:5432/lakucha`
+(user/password `lakucha`/`lakucha`) — override via `SPRING_DATASOURCE_URL`,
+`SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`. Flyway migrates the
+schema automatically on startup. See `backend/src/main/resources/application.yml`
+for the full list of configurable environment variables (JWT secret, CORS
+origins, cookie settings, Daraja credentials, rate limits).
 
-   ```bash
-   npm install
-   ```
+**Frontend** (`frontend/`):
 
-4. Navigate to the root directory:
+```bash
+cd frontend
+cp .env.example .env   # set VITE_API_BASE_URL if the backend isn't on :8080
+npm install
+npm run dev
+```
 
-  ```bash
-   cd ..
-   ```
-5. Activate the virtual environment:
-    ```bash
-    source venv/bin/activate
-   ```
-6. Install the requirements:
-   ```bash
-   pip install -r requirements.txt
-   ```
-7. Start the application:
-   ```bash
-   honcho start -f Procfile.dev
-   ```
+Visit `http://localhost:5173`.
+
+### First admin user
+
+There's no self-serve "become admin" endpoint by design. To access `/admin`,
+register a normal account, then promote it directly in the database:
+
+```sql
+UPDATE users SET role = 'ADMIN' WHERE email = 'you@example.com';
+```
+
+## Running tests
+
+**Backend** — unit tests + Testcontainers integration tests (needs Docker):
+
+```bash
+cd backend
+mvn verify
+```
+
+**Frontend** — lint and production build:
+
+```bash
+cd frontend
+npm run lint
+npm run build
+```
+
+**End-to-end smoke test** (Playwright, drives a real browser against a real
+backend + frontend):
+
+```bash
+cd frontend
+npx playwright install --with-deps chromium   # first time only
+npm run test:e2e
+```
 
 ## Features
 
-- **User Registration and Login:** Users can create accounts and log in to the system.
-- **Browse Menu:** Users can view the restaurant's menu with categories and detailed dish information.
-- **Place Orders:** Users can add dishes to their cart, customize their orders, and place orders.
-- **Payment Integration:** Secure payment processing for orders.
+- **Auth:** register/login, short-lived JWT access token + rotating refresh
+  token in an `httpOnly` cookie, silent session refresh on page load
+- **Catalog:** browse products by category, ratings
+- **Cart & checkout:** per-user cart, shipping address, order placement
+- **Payments:** M-Pesa STK Push with async callback reconciliation
+- **Order history:** customers can track their past and in-progress orders
+- **Admin dashboard** (`/admin`, role-gated): product and category CRUD, order
+  list with status updates, contact-message inbox
 
-## Usage
+## Project structure
 
-1. Visit the application in your web browser.
-2. Sign up or log in to your account.
-3. Browse the menu, add dishes to your cart, and customize your order.
-4. Proceed to checkout, enter payment details, and confirm your order.
-5. Track the status of your order in real-time.
-6. Enjoy your delicious meal!
+```
+Lakucha-Dishes/
+├── backend/     # Spring Boot API
+├── frontend/    # React + Vite SPA
+└── docker-compose.yml
+```
+
+See [`WORKPLAN.md`](WORKPLAN.md) for the detailed rewrite plan and current
+phase status.
 
 ## License
 

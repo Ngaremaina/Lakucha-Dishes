@@ -1,0 +1,55 @@
+# Builds and tests the Spring Boot backend. Replaces python-app.yml now that
+# the Flask backend has been removed in favor of the Java/Neon rewrite.
+# Testcontainers spins up a real Postgres for integration tests, so no
+# database secret is needed here — only dummy values for config the app
+# expects to find at startup (JWT signing key, Daraja credentials). Real
+# secrets live in Render/GitHub Actions environment settings at deploy time,
+# never in this file or in test code.
+
+name: Backend (Java)
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        cache: 'maven'
+        cache-dependency-path: backend/pom.xml
+
+    - name: Run tests (unit + Testcontainers integration)
+      working-directory: backend
+      env:
+        JWT_SECRET_KEY: ci-test-secret-key
+        DARAJA_CONSUMER_KEY: ci-test-consumer-key
+        DARAJA_CONSUMER_SECRET: ci-test-consumer-secret
+      run: mvn -B verify
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-surefire-reports
+        path: backend/target/surefire-reports
+
+    - name: Upload coverage report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-jacoco-report
+        path: backend/target/site/jacoco

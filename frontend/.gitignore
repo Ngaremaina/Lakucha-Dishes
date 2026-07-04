@@ -12,6 +12,16 @@ dist
 dist-ssr
 *.local
 
+# Env files (real secrets/config; .env.example is the template and stays tracked)
+.env
+.env.*.local
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

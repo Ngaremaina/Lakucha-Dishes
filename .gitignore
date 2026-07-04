@@ -1,1 +1,8 @@
-env
+# OS / editor cruft not already covered by backend/.gitignore or frontend/.gitignore
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Local Claude Code session config (machine-specific permission grants)
+.claude/settings.local.json

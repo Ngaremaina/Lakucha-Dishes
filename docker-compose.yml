@@ -1,20 +1,54 @@
-version: "3.8"
-
 services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: lakucha
+      POSTGRES_USER: lakucha
+      POSTGRES_PASSWORD: lakucha
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lakucha -d lakucha"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
     ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app
-    restart: always
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lakucha
+      SPRING_DATASOURCE_USERNAME: lakucha
+      SPRING_DATASOURCE_PASSWORD: lakucha
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:80}
+      COOKIE_SECURE: "false"
+      COOKIE_SAME_SITE: Lax
+      DARAJA_CONSUMER_KEY: ${CONSUMER_KEY:-}
+      DARAJA_CONSUMER_SECRET: ${CONSUMER_SECRET:-}
+      DARAJA_PASSKEY: ${PASSKEY:-}
+      DARAJA_CALLBACK_URL: ${DARAJA_CALLBACK_URL:-https://example.com/payments/callback}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
 
   frontend:
     build:
       context: .
       dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}
     ports:
       - "80:80"
-    restart: always
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

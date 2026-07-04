@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: lakucha-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: ${PORT:8080}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET_KEY}
+    access-token-ttl-minutes: ${ACCESS_TOKEN_TTL_MINUTES:15}
+    refresh-token-ttl-days: ${REFRESH_TOKEN_TTL_DAYS:30}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  rate-limit:
+    auth-capacity: ${AUTH_RATE_LIMIT_CAPACITY:10}
+    auth-period-seconds: ${AUTH_RATE_LIMIT_PERIOD_SECONDS:60}
+    payment-capacity: ${PAYMENT_RATE_LIMIT_CAPACITY:5}
+    payment-period-seconds: ${PAYMENT_RATE_LIMIT_PERIOD_SECONDS:60}
+  cookie:
+    secure: ${COOKIE_SECURE:true}
+    same-site: ${COOKIE_SAME_SITE:None}
+  daraja:
+    base-url: ${DARAJA_BASE_URL:https://sandbox.safaricom.co.ke}
+    consumer-key: ${DARAJA_CONSUMER_KEY}
+    consumer-secret: ${DARAJA_CONSUMER_SECRET}
+    shortcode: ${DARAJA_SHORTCODE:174379}
+    passkey: ${DARAJA_PASSKEY}
+    callback-url: ${DARAJA_CALLBACK_URL:https://example.com/payments/callback}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

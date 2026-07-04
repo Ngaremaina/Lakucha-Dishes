@@ -1,61 +1,52 @@
-import { updateCart, handleDelete, getCartItems } from "../../services/Cart";
-import { useAuth } from "../../context/Authentication"
-import { useGlobal } from "../../context/GlobalContext";
+import { useUpdateCartQuantity, useRemoveCartItem } from "../../hooks/useCart";
 
-const CartItem = ({ id, image, description, price, name, quantity, total }) => {
-  const { admin } = useAuth()
-  const { fetchCart } = useGlobal()
-  
+const CartItem = ({ id, productImage, productName, unitPrice, quantity, lineTotal }) => {
+  const { mutate: updateQuantity } = useUpdateCartQuantity();
+  const { mutate: removeItem } = useRemoveCartItem();
+
   const handleDecrease = () => {
-    const newQuantity = quantity <= 1 ? 1 : quantity - 1;
-    const newTotal = newQuantity * price;
-    updateCart(id, name, price, description, image, newTotal, newQuantity, admin.id, fetchCart);
-
+    if (quantity <= 1) return;
+    updateQuantity({ id, quantity: quantity - 1 });
   };
 
-  const handleIncrease = () => {
-    const newQuantity = quantity + 1;
-    const newTotal = newQuantity * price;
-    updateCart(id, name, price, description, image, newTotal, newQuantity, admin.id, fetchCart);
-  };
+  const handleIncrease = () => updateQuantity({ id, quantity: quantity + 1 });
 
   return (
-    <div className="border-t border-b py-4">
+    <div className="border-b border-border py-4">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        {/* Product Image */}
         <div className="w-20 h-20 flex-shrink-0">
-          <img src={image} alt={name} className="w-full h-full object-cover rounded" />
+          <img src={productImage} alt={productName} className="w-full h-full object-cover rounded-(--radius-control)" />
         </div>
 
-        {/* Product Info */}
         <div className="flex-1 min-w-[150px]">
-          <p className="text-sm text-gray-500">{name}</p>
-          <p className="text-sm text-gray-700">{description.substring(0, 50)}...</p>
+          <p className="text-sm font-medium text-ink">{productName}</p>
+          <p className="text-sm text-ink-muted">Kshs. {unitPrice} each</p>
         </div>
 
-        {/* Quantity Control */}
         <div className="flex items-center gap-3">
           <button
-            className="px-2 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
+            className="px-2 py-1 text-sm bg-surface-muted rounded hover:bg-border"
             onClick={handleDecrease}
+            aria-label="Decrease quantity"
           >
             -
           </button>
           <span className="text-sm">{quantity}</span>
           <button
-            className="px-2 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
+            className="px-2 py-1 text-sm bg-surface-muted rounded hover:bg-border"
             onClick={handleIncrease}
+            aria-label="Increase quantity"
           >
             +
           </button>
         </div>
 
-        {/* Price & Delete */}
         <div className="flex items-center gap-4">
-          <p className="text-sm font-medium">Kshs. {total}</p>
+          <p className="text-sm font-medium text-ink">Kshs. {lineTotal}</p>
           <button
-            className="text-red-500 text-xl hover:text-red-700 cursor-pointer"
-            onClick={() => handleDelete(id, fetchCart)}
+            className="text-red-500 text-xl hover:text-red-700"
+            onClick={() => removeItem(id)}
+            aria-label="Remove item"
           >
             &times;
           </button>

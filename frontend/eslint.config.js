@@ -7,6 +7,7 @@ export default [
   { ignores: ['dist'] },
   {
     files: ['**/*.{js,jsx}'],
+    ignores: ['playwright.config.js', 'e2e/**'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -28,6 +29,17 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+    },
+  },
+  {
+    files: ['playwright.config.js', 'e2e/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: globals.node,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
     },
   },
 ]

@@ -1,49 +1,30 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../context/Authentication";
+import Card from "../ui/Card";
 import AddToCartButton from "../button/AddToCartButton";
 
-const FoodItem = ({image, name, price, description}) => {
-    const quantity = 1
-    const total = quantity * price
-    const { admin } = useContext(AuthContext)
-
-    return(
-        <div className="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-fit">
-            <div className="relative p-2.5 h-96 overflow-hidden rounded-xl bg-clip-border">
-                <Link  to={`/${name}`}>
-                    <img
-                        src={image}
-                        alt={name}
-                        className="h-full w-full object-cover rounded-md"
-                    />
-                </Link>
-                
-            </div>
-            <div className="p-4">
-                <div className="mb-2 flex items-center justify-between">
-                <p className="text-slate-800 text-xl font-semibold">
-                    {name}
-                </p>
-                <p className="text-cyan-600 text-xl font-semibold">
-                    Kshs. {price}
-                </p>
-                </div>
-                <p className="text-slate-600 leading-normal font-light">
-                    {description.length > 35 ? `${description.substring(0, 35)}...` : description}
-                </p>
-                <AddToCartButton
-                    name={name}
-                    price={price}
-                    description={description}
-                    image={image}
-                    quantity={1}
-                    total={total}
-                    adminId={admin.id}
-                    />
-            </div>
+const FoodItem = ({ id, image, name, price, description, averageRating }) => (
+  <Card className="flex flex-col my-3 w-full">
+    <Link to={`/products/${id}`} className="block">
+      <div className="p-2.5 h-56 overflow-hidden">
+        <img src={image} alt={name} className="h-full w-full object-cover rounded-(--radius-control)" />
+      </div>
+      <div className="px-4 pt-4">
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <p className="text-ink text-lg font-semibold">{name}</p>
+          <p className="text-brand-600 text-lg font-semibold whitespace-nowrap">Kshs. {price}</p>
         </div>
-    )
-}
+        {averageRating > 0 && (
+          <p className="text-sm text-ink-muted mb-1">★ {averageRating.toFixed(1)}</p>
+        )}
+        <p className="text-ink-muted leading-normal font-light">
+          {description?.length > 60 ? `${description.substring(0, 60)}...` : description}
+        </p>
+      </div>
+    </Link>
+    <div className="px-4 pb-4">
+      <AddToCartButton productId={id} />
+    </div>
+  </Card>
+);
 
-export default FoodItem
+export default FoodItem;

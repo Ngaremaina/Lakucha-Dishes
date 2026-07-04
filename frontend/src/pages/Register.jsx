@@ -1,90 +1,74 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import FormTemplate from "../components/form/FormTemplate";
-import InputField from "../components/form/InputField";
-import SubmitButton from "../components/button/SubmitButton";
-import { registerUser } from "../services/User";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import Input, { Label, FieldError } from "../components/ui/Input";
+import Button from "../components/ui/Button";
+import { registerUser } from "../services/auth";
+
+const schema = z.object({
+  username: z.string().min(1, "Username is required"),
+  email: z.string().email("Enter a valid email"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
 
 const Register = () => {
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
-    const [user, setUser] = useState({
-        username:"",
-        email:"",
-        password:"",
-        role:"client"
-    })
-    const handleChange = (event) => {
-        const input = event.target.name
-        const value = event.target.value
-        setUser(prev => {return {...prev, [input]:value}})
+  const [serverError, setServerError] = useState(null);
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({ resolver: zodResolver(schema) });
+
+  const onSubmit = async (values) => {
+    setServerError(null);
+    try {
+      await registerUser(values);
+      navigate("/signin");
+    } catch (error) {
+      setServerError(error.response?.data?.message ?? "Registration failed");
     }
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const response = await registerUser(user)
-            if (response){
-                navigate("/signin")
-            }
-
-        } finally {
-          setLoading(false);
-        }
-      };
-    return(
-        <div className="w-full overflow-x-hidden lg:h-screen overflow-y-hidden flex items-center justify-center font-[sans-serif] md:h-full">
-            <div className="grid md:grid-cols-2 items-center gap-4 max-md:gap-6 max-w-6xl max-md:max-w-lg w-full p-4 m-4 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-md bg-white">
-            <div className="md:max-w-md w-full px-4">
-                <FormTemplate handleSubmit={handleSubmit} heading="Register User">
-                <InputField
-                    type="text"
-                    placeholder="johndoe"
-                    name="username"
-                    label="Username"
-                    onChange={handleChange}
-                    value={user.username}
-                />
-                <InputField
-                    type="email"
-                    placeholder="johndoe@example.com"
-                    name="email"
-                    label="Email Address"
-                    onChange={handleChange}
-                    value={user.email}
-                />
-                <InputField
-                    label="Password"
-                    type="password"
-                    placeholder="********"
-                    name="password"
-                    onChange={handleChange}
-                    value={user.password}
-                />
-                <>
-                    <p>
-                    Already have an account? {" "}
-                    <Link to="/signin" className="text-blue-700 underline-offset-2">
-                        Click here to Sign In
-                    </Link>
-                    </p>
-                </>
-                <SubmitButton text="Register" loading = {loading}/>
-                </FormTemplate>
+  return (
+    <div className="w-full min-h-screen flex items-center justify-center bg-surface-muted px-4">
+      <div className="grid md:grid-cols-2 items-center gap-6 max-w-4xl w-full p-6 shadow-(--shadow-elevated) rounded-(--radius-card) bg-surface">
+        <div className="w-full">
+          <h1 className="text-2xl mb-6 text-center font-bold text-ink">Register</h1>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <Label htmlFor="username">Username</Label>
+              <Input id="username" placeholder="johndoe" {...register("username")} error={!!errors.username} />
+              <FieldError>{errors.username?.message}</FieldError>
             </div>
-
-            {/* Image - RIGHT */}
-            <div className="h-full h-full rounded-xl flex items-center justify-center">
-                <img
-                src="https://cdn.pixabay.com/photo/2024/09/12/06/02/ai-generated-9041388_640.jpg"
-                className="w-full h-full object-contain rounded-xl"
-                alt="login"
-                />
+            <div>
+              <Label htmlFor="email">Email address</Label>
+              <Input id="email" type="email" placeholder="johndoe@example.com" {...register("email")} error={!!errors.email} />
+              <FieldError>{errors.email?.message}</FieldError>
             </div>
+            <div>
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" placeholder="********" {...register("password")} error={!!errors.password} />
+              <FieldError>{errors.password?.message}</FieldError>
             </div>
+            {serverError && <FieldError>{serverError}</FieldError>}
+            <p className="text-sm text-ink-muted">
+              Already have an account?{" "}
+              <Link to="/signin" className="text-brand-600 underline">Sign in</Link>
+            </p>
+            <Button type="submit" loading={isSubmitting} className="w-full">Register</Button>
+          </form>
         </div>
-    )
-}
+        <img
+          src="https://cdn.pixabay.com/photo/2024/09/12/06/02/ai-generated-9041388_640.jpg"
+          className="hidden md:block w-full h-full object-cover rounded-(--radius-card)"
+          alt=""
+        />
+      </div>
+    </div>
+  );
+};
 
-export default Register
+export default Register;
