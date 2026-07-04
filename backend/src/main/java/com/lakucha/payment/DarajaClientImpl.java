@@ -1,11 +1,16 @@
 package com.lakucha.payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lakucha.common.PaymentProviderException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +26,7 @@ import java.util.Map;
 @Profile("!e2e")
 public class DarajaClientImpl implements DarajaClient {
 
+    private static final Logger log = LoggerFactory.getLogger(DarajaClientImpl.class);
     private static final DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     private final DarajaProperties properties;
@@ -53,13 +59,19 @@ public class DarajaClientImpl implements DarajaClient {
         body.put("AccountReference", accountReference);
         body.put("TransactionDesc", "Payment of Dishes");
 
-        StkPushApiResponse response = restClient.post()
-                .uri("/mpesa/stkpush/v1/processrequest")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(body)
-                .retrieve()
-                .body(StkPushApiResponse.class);
+        StkPushApiResponse response;
+        try {
+            response = restClient.post()
+                    .uri("/mpesa/stkpush/v1/processrequest")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(body)
+                    .retrieve()
+                    .body(StkPushApiResponse.class);
+        } catch (RestClientException ex) {
+            log.error("STK push request to Daraja failed: {}", describe(ex), ex);
+            throw new PaymentProviderException("Unable to reach the payment provider. Please try again shortly.", ex);
+        }
 
         return new StkPushResult(
                 response.merchantRequestId(),
@@ -71,12 +83,24 @@ public class DarajaClientImpl implements DarajaClient {
     private String fetchAccessToken() {
         String credentials = Base64.getEncoder().encodeToString(
                 (properties.consumerKey() + ":" + properties.consumerSecret()).getBytes(StandardCharsets.UTF_8));
-        AccessTokenResponse response = restClient.get()
-                .uri("/oauth/v1/generate?grant_type=client_credentials")
-                .header(HttpHeaders.AUTHORIZATION, "Basic " + credentials)
-                .retrieve()
-                .body(AccessTokenResponse.class);
-        return response.accessToken();
+        try {
+            AccessTokenResponse response = restClient.get()
+                    .uri("/oauth/v1/generate?grant_type=client_credentials")
+                    .header(HttpHeaders.AUTHORIZATION, "Basic " + credentials)
+                    .retrieve()
+                    .body(AccessTokenResponse.class);
+            return response.accessToken();
+        } catch (RestClientException ex) {
+            log.error("Daraja OAuth token request failed: {}", describe(ex), ex);
+            throw new PaymentProviderException("Unable to reach the payment provider. Please try again shortly.", ex);
+        }
+    }
+
+    private String describe(RestClientException ex) {
+        if (ex instanceof RestClientResponseException responseException) {
+            return "status=" + responseException.getStatusCode() + " body=" + responseException.getResponseBodyAsString();
+        }
+        return ex.getMessage();
     }
 
     private record AccessTokenResponse(@JsonProperty("access_token") String accessToken) {
