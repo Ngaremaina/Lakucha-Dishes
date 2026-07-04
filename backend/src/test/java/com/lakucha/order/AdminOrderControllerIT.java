@@ -36,6 +36,17 @@ class AdminOrderControllerIT extends AbstractIntegrationTest {
         return objectMapper.readTree(productJson).get("id").asLong();
     }
 
+    private int countOrders(String adminToken, String status) throws Exception {
+        var request = get("/admin/orders").header("Authorization", "Bearer " + adminToken);
+        if (status != null) {
+            request = request.queryParam("status", status);
+        }
+        String json = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        return objectMapper.readTree(json).get("content").size();
+    }
+
     private long placeOrder(String adminToken, String customerToken, long productId) throws Exception {
         String shippingBody = objectMapper.writeValueAsString(new ShippingRequest("Mia", "Wanjiru", "Nairobi", "Kenyatta Ave", "Nairobi"));
         String shippingJson = mockMvc.perform(post("/shipping").contentType(MediaType.APPLICATION_JSON)
@@ -71,19 +82,30 @@ class AdminOrderControllerIT extends AbstractIntegrationTest {
     @Test
     void adminCanListAllOrdersAndUpdateStatus() throws Exception {
         var admin = createAdminAndLogin("opal", "opal@example.com", "password123");
+
+        // The IT suite shares one Postgres container/Spring context for its whole run (see
+        // AbstractIntegrationTest), and other IT classes (OrderControllerIT, PaymentControllerIT)
+        // also create real orders via checkout. So these lists are never guaranteed to contain
+        // only this test's data — assert against a baseline taken before this test's own order
+        // exists, rather than an absolute count.
+        int ordersBefore = countOrders(admin.accessToken(), null);
+        int pendingBefore = countOrders(admin.accessToken(), "PENDING_PAYMENT");
+
         long productId = createProduct(admin.accessToken(), "Steak", "1200.00");
         var customer = registerAndLogin("percy", "percy@example.com", "password123");
         long orderId = placeOrder(admin.accessToken(), customer.accessToken(), productId);
 
         mockMvc.perform(get("/admin/orders").header("Authorization", "Bearer " + admin.accessToken()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1));
+                .andExpect(jsonPath("$.content.length()").value(ordersBefore + 1));
 
         mockMvc.perform(get("/admin/orders").queryParam("status", "PENDING_PAYMENT")
                         .header("Authorization", "Bearer " + admin.accessToken()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1));
+                .andExpect(jsonPath("$.content.length()").value(pendingBefore + 1));
 
+        // Nothing in the IT suite ever transitions an order to DELIVERED, so this stays a safe
+        // absolute assertion regardless of what other IT classes have run.
         mockMvc.perform(get("/admin/orders").queryParam("status", "DELIVERED")
                         .header("Authorization", "Bearer " + admin.accessToken()))
                 .andExpect(status().isOk())
