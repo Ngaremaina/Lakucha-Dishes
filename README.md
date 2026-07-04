@@ -116,9 +116,6 @@ Lakucha-Dishes/
 └── docker-compose.yml
 ```
 
-See [`WORKPLAN.md`](WORKPLAN.md) for the detailed rewrite plan and current
-phase status.
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
