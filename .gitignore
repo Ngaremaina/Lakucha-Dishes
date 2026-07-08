@@ -7,3 +7,5 @@
 # Local Claude Code session config (machine-specific permission grants)
 .claude/settings.local.json
 .env**
+.vercel
+.env*
