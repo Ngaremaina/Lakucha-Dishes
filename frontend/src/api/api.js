@@ -20,6 +20,19 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// /auth/refresh and /auth/logout act on the refresh-token cookie, so the backend
+// requires a CSRF token on them. The XSRF-TOKEN cookie belongs to the API origin and
+// can't be read from here, so fetch the token from /auth/csrf (which also sets the cookie).
+const CSRF_PATHS = ['/auth/refresh', '/auth/logout'];
+
+axiosInstance.interceptors.request.use(async (config) => {
+  if (CSRF_PATHS.some((path) => config.url?.includes(path))) {
+    const { data } = await axiosInstance.get('/auth/csrf');
+    config.headers[data.headerName] = data.token;
+  }
+  return config;
+});
+
 let refreshPromise = null;
 
 async function refreshAccessToken() {
