@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate, Outlet } from "react-router-dom"
-import { Analytics } from "@vercel/analytics/react"
 import NavBar from "../components/header/NavBar"
 import Footer from "../components/footer/Footer"
 import Loader from "../components/loader/Loader"
@@ -39,7 +38,6 @@ export default function AppRoutes() {
 
   return (
     <>
-      <Analytics />
       <Routes>
         <Route path="/signin" element={<Login />} />
         <Route path="/signup" element={<Register />} />
