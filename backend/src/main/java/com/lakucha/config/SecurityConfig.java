@@ -48,6 +48,9 @@ public class SecurityConfig {
     @Value("${app.cookie.same-site}")
     private String cookieSameSite;
 
+    @Value("${server.servlet.context-path:}")
+    private String contextPath;
+
     @Value("${app.rate-limit.auth-capacity}")
     private int authRateLimitCapacity;
 
@@ -128,7 +131,7 @@ public class SecurityConfig {
         CookieCsrfTokenRepository repository = new CookieCsrfTokenRepository();
         // Same scope and cross-site attributes as the refresh-token cookie it protects.
         repository.setCookieCustomizer(cookie -> cookie
-                .path("/auth")
+                .path(contextPath + "/auth")
                 .secure(cookieSecure)
                 .sameSite(cookieSameSite));
         return repository;
