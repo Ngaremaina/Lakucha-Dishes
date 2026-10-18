@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -14,6 +15,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class AuthControllerIT extends AbstractIntegrationTest {
+
+    // Goes through GET /auth/csrf like the SPA does. Spring Security's csrf() post-processor
+    // can't be used here: it permanently swaps the shared context's CsrfFilter repository for a
+    // session-based one, which breaks the cookie-repository assertions in later tests.
+    private MockHttpServletRequestBuilder csrfPost(String url) throws Exception {
+        MvcResult csrfResult = mockMvc.perform(get("/auth/csrf")).andReturn();
+        String token = objectMapper.readTree(csrfResult.getResponse().getContentAsString()).get("token").asText();
+        return post(url)
+                .cookie(csrfResult.getResponse().getCookie("XSRF-TOKEN"))
+                .header("X-XSRF-TOKEN", token);
+    }
 
     @Test
     void registerCreatesUserAndIssuesTokens() throws Exception {
@@ -68,7 +80,7 @@ class AuthControllerIT extends AbstractIntegrationTest {
     void refreshRotatesTokenAndInvalidatesThePreviousOne() throws Exception {
         AuthedUser user = registerAndLogin("erin", "erin@example.com", "password123");
 
-        MvcResult refreshResult = mockMvc.perform(post("/auth/refresh")
+        MvcResult refreshResult = mockMvc.perform(csrfPost("/auth/refresh")
                         .cookie(new Cookie(RefreshTokenCookieFactory.COOKIE_NAME, user.refreshCookieValue())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").isNotEmpty())
@@ -79,31 +91,60 @@ class AuthControllerIT extends AbstractIntegrationTest {
         assertThat(newCookieValue).isNotEqualTo(user.refreshCookieValue());
 
         // The rotated-out (old) refresh token must no longer work.
-        mockMvc.perform(post("/auth/refresh")
+        mockMvc.perform(csrfPost("/auth/refresh")
                         .cookie(new Cookie(RefreshTokenCookieFactory.COOKIE_NAME, user.refreshCookieValue())))
                 .andExpect(status().isUnauthorized());
 
         // The new one must work.
-        mockMvc.perform(post("/auth/refresh")
+        mockMvc.perform(csrfPost("/auth/refresh")
                         .cookie(new Cookie(RefreshTokenCookieFactory.COOKIE_NAME, newCookieValue)))
                 .andExpect(status().isOk());
     }
 
     @Test
     void refreshWithoutCookieIsRejected() throws Exception {
-        mockMvc.perform(post("/auth/refresh"))
+        mockMvc.perform(csrfPost("/auth/refresh"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void refreshAndLogoutWithoutCsrfTokenAreForbidden() throws Exception {
+        AuthedUser user = registerAndLogin("ivan", "ivan@example.com", "password123");
+        Cookie refreshCookie = new Cookie(RefreshTokenCookieFactory.COOKIE_NAME, user.refreshCookieValue());
+
+        mockMvc.perform(post("/auth/refresh").cookie(refreshCookie))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(post("/auth/logout").cookie(refreshCookie))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void csrfTokenFromEndpointAuthorizesRefresh() throws Exception {
+        AuthedUser user = registerAndLogin("heidi", "heidi@example.com", "password123");
+
+        MvcResult csrfResult = mockMvc.perform(get("/auth/csrf"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.headerName").value("X-XSRF-TOKEN"))
+                .andExpect(cookie().path("XSRF-TOKEN", "/auth"))
+                .andReturn();
+        String token = objectMapper.readTree(csrfResult.getResponse().getContentAsString()).get("token").asText();
+        Cookie csrfCookie = csrfResult.getResponse().getCookie("XSRF-TOKEN");
+
+        mockMvc.perform(post("/auth/refresh")
+                        .cookie(new Cookie(RefreshTokenCookieFactory.COOKIE_NAME, user.refreshCookieValue()), csrfCookie)
+                        .header("X-XSRF-TOKEN", token))
+                .andExpect(status().isOk());
     }
 
     @Test
     void logoutRevokesTheRefreshToken() throws Exception {
         AuthedUser user = registerAndLogin("frank", "frank@example.com", "password123");
 
-        mockMvc.perform(post("/auth/logout")
+        mockMvc.perform(csrfPost("/auth/logout")
                         .cookie(new Cookie(RefreshTokenCookieFactory.COOKIE_NAME, user.refreshCookieValue())))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(post("/auth/refresh")
+        mockMvc.perform(csrfPost("/auth/refresh")
                         .cookie(new Cookie(RefreshTokenCookieFactory.COOKIE_NAME, user.refreshCookieValue())))
                 .andExpect(status().isUnauthorized());
     }

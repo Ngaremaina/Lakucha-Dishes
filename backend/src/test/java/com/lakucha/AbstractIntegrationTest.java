@@ -29,7 +29,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // covered by RateLimitFilterTest instead.
 @org.springframework.test.context.TestPropertySource(properties = {
         "app.rate-limit.auth-capacity=100000",
-        "app.rate-limit.payment-capacity=100000"
+        "app.rate-limit.payment-capacity=100000",
+        // Test-only values so the suite doesn't depend on env vars being exported locally.
+        "app.jwt.secret=it-test-secret-key-it-test-secret-key-32b",
+        "app.daraja.consumer-key=it-test-consumer-key",
+        "app.daraja.consumer-secret=it-test-consumer-secret",
+        "app.daraja.passkey=it-test-passkey"
 })
 public abstract class AbstractIntegrationTest {
 

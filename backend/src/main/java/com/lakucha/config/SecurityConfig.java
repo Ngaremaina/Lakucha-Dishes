@@ -6,6 +6,7 @@ import com.lakucha.auth.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -19,6 +20,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,6 +41,12 @@ public class SecurityConfig {
 
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
+
+    @Value("${app.cookie.secure}")
+    private boolean cookieSecure;
+
+    @Value("${app.cookie.same-site}")
+    private String cookieSameSite;
 
     @Value("${app.rate-limit.auth-capacity}")
     private int authRateLimitCapacity;
@@ -87,7 +97,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                // Everything else authenticates with a bearer token, which a cross-site request
+                // can't attach; only these endpoints act on the refresh-token cookie.
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(csrfTokenRepository())
+                        .requireCsrfProtectionMatcher(new OrRequestMatcher(
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/auth/refresh"),
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/auth/logout"))))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(eh -> eh
@@ -95,7 +111,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(forbiddenAccessDeniedHandler()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logout").permitAll()
+                        .requestMatchers("/auth/register", "/auth/login", "/auth/refresh", "/auth/logout", "/auth/csrf").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/products/**", "/categories/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/contact").permitAll()
                         .requestMatchers("/payments/callback").permitAll()
@@ -105,6 +121,17 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(rateLimitFilter(), JwtAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public CookieCsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository repository = new CookieCsrfTokenRepository();
+        // Same scope and cross-site attributes as the refresh-token cookie it protects.
+        repository.setCookieCustomizer(cookie -> cookie
+                .path("/auth")
+                .secure(cookieSecure)
+                .sameSite(cookieSameSite));
+        return repository;
     }
 
     @Bean

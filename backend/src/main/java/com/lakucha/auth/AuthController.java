@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,17 @@ public class AuthController {
     public AuthController(AuthService authService, RefreshTokenCookieFactory cookieFactory) {
         this.authService = authService;
         this.cookieFactory = cookieFactory;
+    }
+
+    // The SPA is served from a different origin, so it can't read the XSRF-TOKEN cookie;
+    // it fetches the token here instead (CORS keeps other origins from reading the response)
+    // and echoes it in the X-XSRF-TOKEN header on the cookie-authenticated /refresh and /logout.
+    @GetMapping("/csrf")
+    public CsrfTokenResponse csrf(CsrfToken token) {
+        return new CsrfTokenResponse(token.getHeaderName(), token.getToken());
+    }
+
+    public record CsrfTokenResponse(String headerName, String token) {
     }
 
     @PostMapping("/register")
